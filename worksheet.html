@@ -1,0 +1,570 @@
+<!doctype html><html lang="en"><head><title>City Intelligence Worksheet</title><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<a href="index.html" style="position:fixed;top:10px;left:12px;z-index:9;font:600 12px/1 system-ui,sans-serif;letter-spacing:.04em;color:#0E6E78;background:rgba(247,249,250,.92);border:1px solid #C3CDD4;padding:7px 10px;border-radius:2px;text-decoration:none">← Policy Intelligence Platform</a>
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:ital,wght@0,400;0,600;1,400&display=swap">
+
+<style>
+:root{
+  --paper:#E7EBEE; --sheet:#F7F9FA; --card:#FFFFFF;
+  --ink:#0D1A22; --ink-2:#33454F; --ink-3:#6B7C86;
+  --rule:#C3CDD4; --rule-soft:#DDE4E8;
+  --accent:#0E6E78; --accent-soft:#DCEBEC;
+  --panel:#0D1A22; --panel-ink:#DEE7EB; --panel-ink-2:#93A6AF; --panel-rule:#283B45;
+  --write:#B7C4CB;
+  --p1:#1D4ED8; --p2:#6D28D9; --p3:#15803D; --p4:#A16207; --p5:#C2410C; --p6:#BE185D;
+  --warn:#8A2D0B; --warn-bg:#FBEAE2;
+  --shadow:0 1px 2px rgba(13,26,34,.06), 0 8px 24px -18px rgba(13,26,34,.45);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0A1014; --sheet:#111A20; --card:#162128;
+    --ink:#E4ECF0; --ink-2:#B4C4CD; --ink-3:#8194A0;
+    --rule:#2C3D47; --rule-soft:#22313A;
+    --accent:#4FBFC9; --accent-soft:#12333A;
+    --panel:#050B0E; --panel-ink:#DEE7EB; --panel-ink-2:#8FA3AD; --panel-rule:#22333C;
+    --write:#33454F;
+    --p1:#7CA5FF; --p2:#B58BFF; --p3:#5FCB86; --p4:#DDB44A; --p5:#FF9057; --p6:#FF7BAE;
+    --warn:#FFAE85; --warn-bg:#2A1710;
+    --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 28px -20px rgba(0,0,0,.9);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0A1014; --sheet:#111A20; --card:#162128;
+  --ink:#E4ECF0; --ink-2:#B4C4CD; --ink-3:#8194A0;
+  --rule:#2C3D47; --rule-soft:#22313A;
+  --accent:#4FBFC9; --accent-soft:#12333A;
+  --panel:#050B0E; --panel-ink:#DEE7EB; --panel-ink-2:#8FA3AD; --panel-rule:#22333C;
+  --write:#33454F;
+  --p1:#7CA5FF; --p2:#B58BFF; --p3:#5FCB86; --p4:#DDB44A; --p5:#FF9057; --p6:#FF7BAE;
+  --warn:#FFAE85; --warn-bg:#2A1710;
+  --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 28px -20px rgba(0,0,0,.9);
+}
+
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:"IBM Plex Sans","Helvetica Neue",Arial,sans-serif;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+.wrap{padding:28px 20px 56px;display:flex;justify-content:center}
+.sheet{width:100%;max-width:1260px;background:var(--sheet);border:1px solid var(--rule);box-shadow:var(--shadow);padding:34px 34px 0}
+
+/* masthead */
+.mast{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:28px;align-items:end;padding-bottom:18px;border-bottom:2px solid var(--ink)}
+h1{font-family:Archivo,sans-serif;font-weight:800;font-size:clamp(28px,4vw,48px);line-height:.98;letter-spacing:-.02em;margin:0 0 12px;text-transform:uppercase;text-wrap:balance}
+h1 em{font-style:normal;color:var(--accent)}
+.deck{max-width:64ch;color:var(--ink-2);font-size:14.5px;margin:0}
+.deck b{color:var(--ink);font-weight:600}
+.byline{margin-top:12px;font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+.byline strong{color:var(--accent);font-weight:600}
+.idbox{border:1px solid var(--rule);background:var(--card);padding:12px 14px;display:flex;flex-direction:column;gap:10px}
+.idbox .t{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+.f{display:flex;align-items:baseline;gap:8px;font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.f i{flex:1;border-bottom:1px solid var(--write);height:15px;display:block}
+
+/* layout */
+.atlas{display:grid;grid-template-columns:minmax(0,1fr) 272px;gap:0 26px;padding-top:6px}
+.levels{display:flex;flex-direction:column}
+.level{display:grid;grid-template-columns:72px minmax(0,1fr);gap:0 20px;padding:26px 0;border-bottom:1px solid var(--rule)}
+.gutter{position:relative}
+.gutter .num{font-family:Archivo,sans-serif;font-weight:800;font-size:50px;line-height:.8;letter-spacing:-.04em;color:transparent;-webkit-text-stroke:1.5px var(--lvl,var(--accent))}
+.gutter .lvl{position:absolute;top:64px;left:6px;transform-origin:left top;transform:rotate(90deg);font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--lvl,var(--accent));white-space:nowrap;font-weight:600}
+.lvl-head{margin-bottom:16px}
+.lvl-head h2{font-family:Archivo,sans-serif;font-weight:700;font-size:22px;line-height:1.1;margin:0 0 5px;letter-spacing:-.01em}
+.lvl-head p{margin:0;color:var(--ink-2);font-size:13.5px;max-width:82ch}
+
+.grid{display:grid;gap:12px}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g6{grid-template-columns:repeat(6,minmax(0,1fr))}
+
+.card{background:var(--card);border:1px solid var(--rule-soft);padding:13px 14px 15px;display:flex;flex-direction:column;gap:9px}
+.card h3{font-family:"IBM Plex Mono",monospace;font-size:10.5px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;margin:0;color:var(--lvl,var(--accent))}
+.q{margin:0;font-size:12.5px;line-height:1.4;color:var(--ink-2)}
+.q b{color:var(--ink);font-weight:600}
+.hint{font-size:11px;color:var(--ink-3);font-style:italic;line-height:1.4;margin:0}
+
+/* inspiration prompts */
+.eg{display:block;font-size:10.8px;line-height:1.38;color:var(--ink-3);border-left:2px solid var(--accent-soft);padding:1px 0 1px 8px;margin:-3px 0 1px}
+.eg b{font-family:"IBM Plex Mono",monospace;font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:600;display:block;margin-bottom:1px}
+.spine .eg{border-left-color:var(--panel-rule);color:var(--panel-ink-2);opacity:.85}
+.spine .eg b{color:var(--accent)}
+body.no-eg .eg{display:none}
+.egbar{display:flex;align-items:center;gap:8px;font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);border:1px solid var(--rule);background:var(--card);padding:7px 11px;cursor:pointer;user-select:none}
+.egbar:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.egbar input{accent-color:var(--accent);margin:0}
+
+/* writing space */
+.lines{display:block;background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 21px,var(--write) 21px,var(--write) 22px);height:var(--h,66px);margin-top:2px}
+.lines.s{--h:44px}
+.lines.l{--h:110px}
+.lines.xl{--h:154px}
+
+/* checkbox row */
+.checks{display:flex;flex-direction:column;gap:7px;margin:0;padding:0;list-style:none}
+.checks li{position:relative;padding-left:22px;font-size:12.4px;line-height:1.38;color:var(--ink-2)}
+.checks li::before{content:"";position:absolute;left:0;top:3px;width:12px;height:12px;border:1px solid var(--rule);background:var(--sheet)}
+.checks li b{color:var(--ink);font-weight:600}
+
+/* 1-5 scale */
+.scale{display:flex;align-items:center;gap:6px;margin-top:4px}
+.scale span{font-family:"IBM Plex Mono",monospace;font-size:9.5px;color:var(--ink-3);letter-spacing:.08em}
+.scale i{width:13px;height:13px;border:1px solid var(--rule);border-radius:50%;display:block}
+
+/* strips */
+.strip{border:1px solid var(--rule);background:var(--accent-soft);padding:11px 16px;margin-bottom:12px}
+.strip h3{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;margin:0 0 4px;color:var(--accent);font-weight:600}
+.strip p{margin:0;font-size:12.5px;color:var(--ink-2)}
+.strip p b{color:var(--ink);font-weight:600}
+
+/* pillar worksheet cells */
+.pillar{background:var(--card);border:1px solid var(--rule-soft);border-top:4px solid var(--pc);padding:11px 11px 13px;display:flex;flex-direction:column;gap:6px}
+.pillar .pn{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.12em;color:var(--pc);font-weight:600}
+.pillar h4{font-family:Archivo,sans-serif;font-size:13.5px;font-weight:700;margin:0;line-height:1.15}
+.pillar .lab{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin:4px 0 0}
+
+/* numbered blanks */
+.steps{counter-reset:s;display:flex;flex-direction:column;gap:9px;margin:0;padding:0;list-style:none}
+.steps li{counter-increment:s;position:relative;padding-left:26px;font-size:12.4px;line-height:1.38;color:var(--ink-2)}
+.steps li::before{content:counter(s,decimal-leading-zero);position:absolute;left:0;top:1px;font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--lvl,var(--accent));font-weight:600;font-variant-numeric:tabular-nums}
+.steps li b{color:var(--ink);font-weight:600}
+
+/* paired rows with blanks */
+.pairs{display:flex;flex-direction:column;border-top:1px solid var(--rule-soft)}
+.pair{display:grid;grid-template-columns:150px minmax(0,1fr);gap:12px;align-items:center;padding:8px 0;border-bottom:1px solid var(--rule-soft);font-size:12.2px}
+.pair .fm{color:var(--warn);font-weight:600}
+.pair .blank{border-bottom:1px solid var(--write);height:16px}
+
+/* spine */
+.spine{background:var(--panel);color:var(--panel-ink);padding:24px 20px 26px;display:flex;flex-direction:column;gap:16px;align-self:stretch}
+.spine-title{font-family:Archivo,sans-serif;font-weight:800;font-size:19px;line-height:1.05;text-transform:uppercase;margin:0;color:#fff}
+.spine-lede{margin:0;font-size:12px;line-height:1.5;color:var(--panel-ink-2)}
+.sblock h4{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;margin:0 0 8px;color:var(--accent);font-weight:600}
+.sblock p{margin:0 0 6px;font-size:12px;line-height:1.42;color:var(--panel-ink-2)}
+.sblock p b{color:var(--panel-ink);font-weight:600}
+.dlines{background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 21px,var(--panel-rule) 21px,var(--panel-rule) 22px);height:var(--h,44px);display:block}
+.pick{display:flex;flex-direction:column;gap:6px;margin:0;padding:0;list-style:none}
+.pick li{position:relative;padding-left:20px;font-size:12px;line-height:1.38;color:var(--panel-ink-2)}
+.pick li::before{content:"";position:absolute;left:0;top:3px;width:11px;height:11px;border:1px solid var(--panel-rule)}
+.spine hr{border:0;border-top:1px solid var(--panel-rule);margin:0}
+
+/* footer */
+.foot{display:grid;grid-template-columns:64px minmax(0,1fr);gap:20px;padding:24px 0 30px;border-top:2px solid var(--ink)}
+.foot .num{font-family:Archivo,sans-serif;font-weight:800;font-size:50px;line-height:.8;color:transparent;-webkit-text-stroke:1.5px var(--accent)}
+.foot h2{font-family:Archivo,sans-serif;font-weight:700;font-size:20px;margin:0 0 6px;text-transform:uppercase}
+.foot > div > p{margin:0 0 12px;font-size:13px;line-height:1.55;color:var(--ink-2);max-width:88ch}
+.commit{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 26px;margin-top:4px}
+.commit .row{display:flex;flex-direction:column;gap:2px}
+.commit .lab{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3)}
+.commit .blank{border-bottom:1px solid var(--write);height:19px}
+.src{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.05em;color:var(--ink-3);line-height:1.6;margin-top:18px;padding-top:12px;border-top:1px solid var(--rule-soft)}
+
+@media (max-width:1080px){
+  .atlas{grid-template-columns:minmax(0,1fr)}
+  .spine{margin:20px 0 0}
+  .g6{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .g4{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:680px){
+  .sheet{padding:22px 16px 0}
+  .mast{grid-template-columns:minmax(0,1fr)}
+  .level{grid-template-columns:minmax(0,1fr);gap:14px}
+  .gutter{display:flex;align-items:baseline;gap:12px}
+  .gutter .num{font-size:34px}
+  .gutter .lvl{position:static;transform:none}
+  .g6,.g4,.g3,.g2,.commit{grid-template-columns:minmax(0,1fr)}
+  .pair{grid-template-columns:minmax(0,1fr)}
+  .foot{grid-template-columns:minmax(0,1fr)}
+}
+@media print{
+  body{background:#fff}
+  .wrap{padding:0}
+  .sheet{max-width:none;border:0;box-shadow:none;padding:0}
+  .egbar{display:none}
+  .level{padding:13px 0}
+  /* no section heading may sit at the foot of a page without content under it */
+  .lvl-head{break-inside:avoid;break-after:avoid}
+  .gutter{break-inside:avoid;break-after:avoid}
+  .spine>div:first-child{break-inside:avoid;break-after:avoid}
+  .sblock h4,.card h3,.strip h3{break-after:avoid}
+  .strip,.grid,.tiles{break-before:avoid}
+  .card,.strip,.pillar{break-inside:avoid}
+  /* the spine prints as a light panel: it splits across pages gracefully and does not
+     drink a cartridge when a facilitator runs twenty copies */
+  .spine{background:#fff;border:1px solid var(--rule);color:var(--ink);margin-top:16px;padding:18px}
+  .spine .spine-title{color:var(--ink)}
+  .spine-lede,.spine .sblock p,.pick li{color:var(--ink-2)}
+  .pick li::before{border-color:var(--rule)}
+  .spine .sblock li b,.spine .sblock p b{color:var(--ink)}
+  .spine hr{border-top-color:var(--rule-soft)}
+  .dlines{background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 21px,var(--write) 21px,var(--write) 22px)}
+  .spine .eg{border-left-color:var(--accent-soft);color:var(--ink-3);opacity:1}
+  .sblock{break-inside:avoid}
+  /* the commitment sheet gets its own page on purpose — it is the page a facilitator
+     collects, photographs, or asks people to keep on their desk */
+  .foot{break-before:page;padding:0;border-top:0}
+  .foot h2{font-size:26px}
+  .foot .num{font-size:60px}
+  .foot > div > p{font-size:15px}
+  .commit{gap:26px 40px;margin-top:18px}
+  .commit .lab{font-size:11px}
+  .commit .blank{height:52px}
+  .foot .closer{margin-top:26px;padding-top:20px;border-top:1px solid var(--rule-soft)}
+  .atlas{align-items:start}
+}
+</style>
+
+<div class="wrap">
+<div class="sheet">
+
+  <header class="mast">
+    <div>
+      <h1>City Intelligence<br><em>Worksheet</em></h1>
+      <p class="deck">The companion to <b>The Map of City Intelligence</b>. Same four levels, applied to one city and one challenge you are actually carrying. Work it in order — the diagnosis at level 02 is only as good as the pattern you named at level 01, and the intervention at level 03 is only as good as the diagnosis.</p>
+      <p class="byline">Dr. Fatime Barbara Hegyi · <strong>Future of Cities</strong> · Workshop companion — one sheet per participant</p>
+    </div>
+    <div class="idbox">
+      <span class="t">This sheet</span>
+      <span class="f">City <i></i></span>
+      <span class="f">Practitioner <i></i></span>
+      <span class="f">Role <i></i></span>
+      <span class="f">Date <i></i></span>
+      <span class="f">The challenge I am carrying <i></i></span>
+      <label class="egbar"><input type="checkbox" id="egToggle" checked> Show examples (print reflects this)</label>
+    </div>
+  </header>
+
+  <div class="atlas">
+    <div class="levels">
+
+      <!-- 01 -->
+      <section class="level" style="--lvl:var(--p1)">
+        <div class="gutter"><div class="num">01</div><div class="lvl">Seeing</div></div>
+        <div>
+          <div class="lvl-head">
+            <h2>Name the pattern, not the event</h2>
+            <p>Start with something you would normally treat as a problem to be fixed. Then work backwards to what is producing it.</p>
+          </div>
+          <div class="grid g4">
+            <div class="card">
+              <h3>The event → the pattern</h3>
+              <p class="q">The event as it reaches your desk:</p>
+              <span class="eg"><b>If you're stuck</b>The third road-safety campaign in five years · a participation platform nobody uses · complaints rising in a district that used to be quiet</span>
+              <span class="lines s"></span>
+              <p class="q">The pattern producing it, if you look across three years:</p>
+              <span class="eg"><b>If you're stuck</b>We fund campaigns because they are visible; the junction design has not changed since 1998</span>
+              <span class="lines"></span>
+            </div>
+            <div class="card">
+              <h3>The four flows</h3>
+              <p class="q">What is each flow telling you about this challenge?</p>
+              <p class="q"><b>People</b></p><span class="eg">Footfall down at the market · young families leaving the district</span><span class="lines s"></span>
+              <p class="q"><b>Information</b></p><span class="eg">Housing and health hold the same data and never meet</span><span class="lines s"></span>
+              <p class="q"><b>Resources</b></p><span class="eg">Energy cost concentrated in the oldest housing stock</span><span class="lines s"></span>
+              <p class="q"><b>Emotions</b></p><span class="eg">Rumour about safety outrunning the crime figures · people stop reporting</span><span class="lines s"></span>
+            </div>
+            <div class="card">
+              <h3>Loops &amp; lags</h3>
+              <p class="q">Which loop is currently active?</p>
+              <ul class="checks">
+                <li><b>Balancing</b> — the system is stabilising itself</li>
+                <li><b>Reinforcing</b> — the response is feeding the problem</li>
+              </ul>
+              <span class="eg"><b>If you're stuck</b>More parking &rarr; more driving &rarr; more congestion (reinforcing) · shade trees &rarr; lower heat stress &rarr; less cooling demand (balancing)</span>
+              <p class="q" style="margin-top:4px">The delay I must budget for before results appear — and the month at which someone will call it a failure:</p>
+              <span class="eg">Mobility behaviour 5–15 years; health outcomes decades; our reporting cycle 12 months</span>
+              <span class="lines"></span>
+            </div>
+            <div class="card">
+              <h3>Invisible outcomes</h3>
+              <p class="q">Which of these is depleting around this challenge — and how would you know before the data spikes?</p>
+              <ul class="checks">
+                <li>Trust in institutions</li>
+                <li>Daily dignity</li>
+                <li>Chronic stress</li>
+                <li>Belonging</li>
+                <li>Safety felt vs. measured</li>
+              </ul>
+              <span class="eg"><b>Signs</b>People stop reporting because nothing happened last time · parents no longer let children walk to school · turnover among frontline staff</span>
+              <span class="lines s"></span>
+            </div>
+          </div>
+          <div class="card" style="margin-top:12px">
+            <h3>Failure-mode audit — which is breaking the chain between evidence and action here?</h3>
+            <div class="grid g6" style="gap:10px">
+              <div><ul class="checks"><li><b>Fragmentation</b></li></ul></div>
+              <div><ul class="checks"><li><b>Over-measurement</b></li></ul></div>
+              <div><ul class="checks"><li><b>Translation gap</b></li></ul></div>
+              <div><ul class="checks"><li><b>Misaligned incentives</b></li></ul></div>
+              <div><ul class="checks"><li><b>Short-termism</b></li></ul></div>
+              <div><p class="hint">Tick the dominant one. Name the evidence below.</p></div>
+            </div>
+            <span class="eg"><b>If you're stuck</b>The evaluation exists but lands after the budget decision (translation gap) · twelve dashboards and no priority among them (over-measurement) · the target was met and the outcome did not move (misaligned incentives)</span>
+            <span class="lines s"></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 02 -->
+      <section class="level" style="--lvl:var(--p3)">
+        <div class="gutter"><div class="num">02</div><div class="lvl">Measuring</div></div>
+        <div>
+          <div class="lvl-head">
+            <h2>Read your city through the instrument</h2>
+            <p>Score from what you actually observe, not from the city's own reporting. A pillar you cannot score is itself a finding.</p>
+          </div>
+
+          <div class="strip">
+            <h3>The four conditions — rate your system 1 (absent) to 5 (structurally protected)</h3>
+            <div class="grid g4" style="gap:14px;margin-top:8px">
+              <div><p class="q"><b>Circulation</b> — information crosses departments before the crisis</p><div class="scale"><span>1</span><i></i><i></i><i></i><i></i><i></i><span>5</span></div></div>
+              <div><p class="q"><b>Feedback</b> — the system learns what its actions produce</p><div class="scale"><span>1</span><i></i><i></i><i></i><i></i><i></i><span>5</span></div></div>
+              <div><p class="q"><b>Alignment</b> — those who know reach those who decide</p><div class="scale"><span>1</span><i></i><i></i><i></i><i></i><i></i><span>5</span></div></div>
+              <div><p class="q"><b>Time horizon</b> — long-term capacity is protected</p><div class="scale"><span>1</span><i></i><i></i><i></i><i></i><i></i><span>5</span></div></div>
+            </div>
+            <p class="q" style="margin-top:10px"><b>The lowest condition — and the institutional structure producing that absence:</b></p>
+            <span class="eg"><b>If you're stuck</b>Alignment: the team holding the data has no route to the committee that decides · Time horizon: every budget line is annual, every effect is decadal</span>
+            <span class="lines s"></span>
+          </div>
+
+          <div class="grid g6">
+            <div class="pillar" style="--pc:var(--p1)"><span class="pn">01</span><h4>Foundational</h4><div class="scale"><span>1</span><i></i><i></i><i></i><i></i><i></i><span>5</span></div><p class="lab">What it conceals</p><span class="lines s"></span></div>
+            <div class="pillar" style="--pc:var(--p2)"><span class="pn">02</span><h4>Innovator</h4><div class="scale"><span>1</span><i></i><i></i><i></i><i></i><i></i><span>5</span></div><p class="lab">What it conceals</p><span class="lines s"></span></div>
+            <div class="pillar" style="--pc:var(--p3)"><span class="pn">03</span><h4>Integrator</h4><div class="scale"><span>1</span><i></i><i></i><i></i><i></i><i></i><span>5</span></div><p class="lab">What it conceals</p><span class="lines s"></span></div>
+            <div class="pillar" style="--pc:var(--p4)"><span class="pn">04</span><h4>Regenerative</h4><div class="scale"><span>1</span><i></i><i></i><i></i><i></i><i></i><span>5</span></div><p class="lab">What it conceals</p><span class="lines s"></span></div>
+            <div class="pillar" style="--pc:var(--p5)"><span class="pn">05</span><h4>Connected</h4><div class="scale"><span>1</span><i></i><i></i><i></i><i></i><i></i><span>5</span></div><p class="lab">What it conceals</p><span class="lines s"></span></div>
+            <div class="pillar" style="--pc:var(--p6)"><span class="pn">06</span><h4>Healthy Society</h4><div class="scale"><span>1</span><i></i><i></i><i></i><i></i><i></i><span>5</span></div><p class="lab">What it conceals</p><span class="lines s"></span></div>
+          </div>
+
+          <p class="eg" style="margin:8px 0 12px"><b>What "what it conceals" means</b>A strong city average hiding a seven-year life expectancy gap between districts · high R&amp;D output alongside low digital access in half the city · good air-quality figures measured only at the two cleanest stations</p>
+
+          <div class="grid g3" style="margin-top:12px">
+            <div class="card">
+              <h3>The three-step read</h3>
+              <ol class="steps">
+                <li><b>The outlier.</b> Which pillar diverges most from the rest of the profile?<span class="eg">Healthy Society sits well below everything else</span><span class="lines s"></span></li>
+                <li><b>The broken connection.</b> Which two pillars should be aligned and are not?<span class="eg">Regenerative is strong, Healthy Society is not — the green investment is not reaching the districts with the worst air</span><span class="lines s"></span></li>
+                <li><b>The attribution question,</b> in one sentence.<span class="eg">Which siting decisions, over fifteen years, put the new parks where the need was lowest?</span><span class="lines s"></span></li>
+              </ol>
+            </div>
+            <div class="card">
+              <h3>Signal / gap</h3>
+              <p class="q"><b>The weak signal</b> — something small that feels off and has not yet become a problem:</p>
+              <span class="eg">Informal food-sharing networks appearing · a rise in school transfer requests · park usage falling in one district only</span>
+              <span class="lines"></span>
+              <p class="q"><b>The structural gap</b> — two parts of the system that should be linked and are not:</p>
+              <span class="eg">The air-quality team and the school-siting team share no process · social services see the eviction, housing sees the arrears, neither sees both</span>
+              <span class="lines"></span>
+              <p class="hint">One buys lead time. The other is the cause. Do not treat one as the other.</p>
+            </div>
+            <div class="card">
+              <h3>Health as accountability</h3>
+              <p class="q">A health gap you can name in this city — and which pillar failure is most likely driving it:</p>
+              <span class="eg">Life expectancy seven years shorter in the periphery — most likely Foundational · respiratory admissions concentrated along two corridors — Regenerative</span>
+              <span class="lines"></span>
+              <p class="q">The sectoral response already tried, and why it was not enough:</p>
+              <span class="eg">A screening campaign — it could not change damp housing or a 90-minute commute</span>
+              <span class="lines"></span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 03 -->
+      <section class="level" style="--lvl:var(--p5)">
+        <div class="gutter"><div class="num">03</div><div class="lvl">Acting</div></div>
+        <div>
+          <div class="lvl-head">
+            <h2>Design the move — and the strategy that survives you</h2>
+            <p>Small enough to be measured, structural enough to matter, with the feedback mechanism written in at step 06 rather than added afterwards.</p>
+          </div>
+
+          <div class="grid g3">
+            <div class="card">
+              <h3>The first intelligent move</h3>
+              <ol class="steps">
+                <li>The pillar I choose<span class="eg">Foundational</span><span class="lines s"></span></li>
+                <li>Why it matters for quality of life<span class="eg">Trust is the floor under every other programme we run</span><span class="lines s"></span></li>
+                <li>The signal — not the symptom<span class="eg">Falling response rates to consultation, not the consultations themselves</span><span class="lines s"></span></li>
+                <li>Spillover into which adjacent pillars<span class="eg">Integrator, Healthy Society</span><span class="lines s"></span></li>
+                <li>The cost of not acting, over ten years<span class="eg">Every unanswered consultation raises the cost of the next one</span><span class="lines s"></span></li>
+                <li>The move — and the feedback mechanism inside it<span class="eg">One standing citizen panel with a published obligation to respond — measured as the share of recommendations answered within 60 days</span><span class="lines"></span></li>
+                <li>Who I must coordinate with<span class="eg">Housing, mobility, communications</span><span class="lines s"></span></li>
+              </ol>
+            </div>
+            <div class="card">
+              <h3>Hallmark check — does the design meet all four?</h3>
+              <ul class="checks">
+                <li>Targets the <b>structural gap</b>, not the symptom</li>
+                <li>Accounts for <b>systemic delay</b> in its own timeline</li>
+                <li>Creates <b>spillover</b> across adjacent pillars</li>
+                <li>Embeds a <b>feedback mechanism at design stage</b></li>
+              </ul>
+              <p class="q" style="margin-top:6px">The weakest of the four, and what I will change:</p>
+              <span class="eg">There is no feedback mechanism — evaluation was scheduled for year three. Move it into the design and publish the first reading at month six.</span>
+              <span class="lines"></span>
+              <p class="hint">An intervention without a feedback mechanism is a bet, not a system.</p>
+            </div>
+            <div class="card">
+              <h3>Trap check</h3>
+              <ul class="checks">
+                <li>Scaling before the first move has worked</li>
+                <li>Optimising for visibility over structure</li>
+                <li>Reading a systemic delay as failure</li>
+                <li>A single-pillar fix meeting an adjacent ceiling</li>
+                <li>Designing without feedback</li>
+              </ul>
+              <p class="q" style="margin-top:6px">The trap this design is most exposed to — and the guard against it:</p>
+              <span class="eg">Scaling: we planned twelve districts in year one. Guard — one district, one full feedback cycle, then decide.</span>
+              <span class="lines"></span>
+            </div>
+          </div>
+
+          <div class="grid g2" style="margin-top:12px">
+            <div class="card">
+              <h3>Survival plan — name the owner and the mechanism</h3>
+              <div class="pairs">
+                <div class="pair"><span class="fm">Mandate fragmentation</span><span class="blank"></span></div>
+                <div class="pair"><span class="fm">Metric substitution</span><span class="blank"></span></div>
+                <div class="pair"><span class="fm">Political cycle truncation</span><span class="blank"></span></div>
+                <div class="pair"><span class="fm">Institutional capture</span><span class="blank"></span></div>
+              </div>
+              <p class="eg"><b>If you're stuck</b>A named deputy with a standing cross-department review · one published outcome metric nobody can substitute · a handover protocol signed before the election · an external panel with the right to publish</p>
+              <p class="hint">These are structural failures, not motivational ones. A named owner and a written protocol are the countermeasure.</p>
+            </div>
+            <div class="card">
+              <h3>From one move to a sequence</h3>
+              <p class="q"><b>Move one</b> (now) — and what it makes possible:</p>
+              <span class="eg">A data-sharing agreement between housing and health — without it, nothing below can be targeted</span>
+              <span class="lines s"></span>
+              <p class="q"><b>Move two</b> (only once move one holds):</p>
+              <span class="eg">Retrofit targeted at the worst-performing stock in the two districts the data identifies</span>
+              <span class="lines s"></span>
+              <p class="q"><b>Move three</b>:</p>
+              <span class="eg">District-level monitoring that reports into the same published metric</span>
+              <span class="lines s"></span>
+              <p class="q"><b>The Foundational floor</b> — is it strong enough to carry this sequence? If not, what has to be fixed first?</p>
+              <span class="eg">Digital access is weakest in exactly the districts this targets — that comes first</span>
+              <span class="lines s"></span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 04 -->
+      <section class="level" style="--lvl:var(--p2);border-bottom:0">
+        <div class="gutter"><div class="num">04</div><div class="lvl">Horizon</div></div>
+        <div>
+          <div class="lvl-head">
+            <h2>Capacities to build, three years out</h2>
+            <p>Not forecasts. Tick the capacities this city is missing, then write the one you can start building inside your own mandate.</p>
+          </div>
+          <div class="grid g4">
+            <div><ul class="checks"><li>Optionality by design</li><li>Foresight over forecasting</li></ul></div>
+            <div><ul class="checks"><li>Reading beyond the city average</li><li>Participatory sensing</li></ul></div>
+            <div><ul class="checks"><li>Transition-proofed governance</li><li>AI-augmented cognition</li></ul></div>
+            <div><ul class="checks"><li>Shared data infrastructure</li><li>Cross-city comparison</li></ul></div>
+          </div>
+          <div class="card" style="margin-top:12px">
+            <h3>The capacity I can start building — and the first concrete step inside my own mandate</h3>
+            <span class="eg"><b>If you're stuck</b>A data-sharing agreement with the health authority · a standing scenario review before any 10-year commitment · publishing district-level figures alongside the city average · one question added to every board paper: what would tell us this is not working?</span>
+            <span class="lines"></span>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- spine -->
+    <aside class="spine">
+      <div>
+        <h2 class="spine-title">The Steward's Spine</h2>
+        <p class="spine-lede">The instrument does not think. This part of the sheet is about you, and it is the part most people skip.</p>
+      </div>
+      <div class="sblock">
+        <h4>Four postures — tick two</h4>
+        <p style="margin-bottom:4px">Which <b>dominates</b> your practice? Which is most <b>underdeveloped</b>?</p>
+        <ul class="pick">
+          <li><b>Optimiser</b> — performance, delivery, measurable results</li>
+          <li><b>Translator</b> — bridging data, people, institutions</li>
+          <li><b>Steward</b> — long-term direction, future capacity, dignity</li>
+          <li><b>Systems Listener</b> — weak signals, feedback, lived experience</li>
+        </ul>
+        <p style="margin-top:8px">One concrete shift in your next project that would activate the underused posture:</p>
+        <span class="eg">Bring one frontline worker into the design meeting · spend the first hour of the next review on what the numbers do not show</span>
+        <span class="dlines" style="--h:66px"></span>
+      </div>
+      <hr>
+      <div class="sblock">
+        <h4>Three demands — where are you thinnest?</h4>
+        <ul class="pick">
+          <li><b>Intellectual honesty</b></li>
+          <li><b>Patience with complexity</b></li>
+          <li><b>Continuity of commitment</b></li>
+        </ul>
+        <span class="eg">We start well and stop at twelve months · we present the finding that fits the strategy we already announced</span>
+        <span class="dlines"></span>
+      </div>
+      <div class="sblock">
+        <h4>Three practices — commit to one</h4>
+        <ul class="pick">
+          <li><b>The structural question habit</b></li>
+          <li><b>Reading against the metric</b></li>
+          <li><b>The personal feedback loop</b></li>
+        </ul>
+        <span class="dlines"></span>
+      </div>
+      <hr>
+      <div class="sblock">
+        <h4>Three equity questions</h4>
+        <p>Who designed the measure you are using, and with which assumptions?</p>
+        <span class="eg">Accessibility scored by car journey time, by people who commute by car</span>
+        <span class="dlines" style="--h:44px"></span>
+        <p style="margin-top:8px">Whose neighbourhoods are absent from this dataset?</p>
+        <span class="eg">Informal settlements, night-shift workers, anyone without a registered address</span>
+        <span class="dlines" style="--h:44px"></span>
+        <p style="margin-top:8px">What does the aggregate conceal about the people inside it?</p>
+        <span class="dlines" style="--h:44px"></span>
+      </div>
+    </aside>
+  </div>
+
+  <footer class="foot">
+    <div class="num">05</div>
+    <div>
+      <h2>Monday morning</h2>
+      <p>One pillar. One signal. One move small enough to be measured and structural enough to matter. Write it as something you could begin this week — and name the date on which you will know whether you were right.</p>
+      <p class="eg" style="margin:0 0 10px;max-width:88ch"><b>A worked example</b>Pillar: Foundational · Signal: consultation response rates falling three years running · First move: one standing citizen panel in one district, with a published obligation to respond · Feedback: share of recommendations answered within 60 days, published quarterly · In the room: housing, mobility, communications · Review: 12 months, and not before.</p>
+      <div class="commit">
+        <div class="row"><span class="lab">The pillar</span><span class="blank"></span></div>
+        <div class="row"><span class="lab">The signal I will watch</span><span class="blank"></span></div>
+        <div class="row"><span class="lab">The first move</span><span class="blank"></span></div>
+        <div class="row"><span class="lab">The feedback mechanism</span><span class="blank"></span></div>
+        <div class="row"><span class="lab">Who else has to be in the room</span><span class="blank"></span></div>
+        <div class="row"><span class="lab">The date I will review it</span><span class="blank"></span></div>
+      </div>
+      <div class="closer">
+        <p class="q" style="font-size:13.5px"><b>What I will stop doing to make room for this.</b> A first move added on top of everything else is not a first move. Name what comes off the desk, or what gets deliberately left alone for the next twelve months.</p>
+        <span class="eg">The fourth awareness campaign · the quarterly report nobody reads · the pilot in district three that has run for three years without a decision</span>
+        <span class="lines" style="--h:132px"></span>
+        <p class="q" style="font-size:13.5px;margin-top:14px"><b>What would tell me I was wrong.</b> Written now, before the result is known.</p>
+        <span class="lines" style="--h:110px"></span>
+      </div>
+      <p class="src">Companion to The Map of City Intelligence · Compiled from the City Intelligence masterclasses for policymakers and researchers, Cities Are Alive, and the City Intelligence Index research · Dr. Fatime Barbara Hegyi · Future of Cities Academy · Brussels, 2026</p>
+    </div>
+  </footer>
+
+</div>
+</div>
+
+<script>
+(function(){
+  var t=document.getElementById('egToggle');
+  if(!t)return;
+  function sync(){document.body.classList.toggle('no-eg',!t.checked);}
+  t.addEventListener('change',sync);
+  sync();
+})();
+</script>
+
+</body></html>

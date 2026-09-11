@@ -1,0 +1,771 @@
+<!doctype html><html lang="en"><head><title>Your City Intelligence Map</title><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<a href="index.html" style="position:fixed;top:10px;left:12px;z-index:9;font:600 12px/1 system-ui,sans-serif;letter-spacing:.04em;color:#0E6E78;background:rgba(247,249,250,.92);border:1px solid #C3CDD4;padding:7px 10px;border-radius:2px;text-decoration:none">← Policy Intelligence Platform</a>
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:ital,wght@0,400;0,600;1,400&display=swap">
+
+<style>
+:root{
+  --paper:#E7EBEE; --sheet:#F7F9FA; --card:#FFFFFF;
+  --ink:#0D1A22; --ink-2:#33454F; --ink-3:#6B7C86;
+  --rule:#C3CDD4; --rule-soft:#DDE4E8;
+  --accent:#0E6E78; --accent-soft:#DCEBEC; --accent-ink:#FFFFFF;
+  --panel:#0D1A22; --panel-ink:#DEE7EB; --panel-ink-2:#93A6AF; --panel-rule:#283B45;
+  --p1:#1D4ED8; --p2:#6D28D9; --p3:#15803D; --p4:#A16207; --p5:#C2410C; --p6:#BE185D;
+  --warn:#8A2D0B; --warn-bg:#FBEAE2;
+  --bar:#0E6E78; --bar-track:#E3E9EC;
+  --shadow:0 1px 2px rgba(13,26,34,.06), 0 8px 24px -18px rgba(13,26,34,.45);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0A1014; --sheet:#111A20; --card:#162128;
+    --ink:#E4ECF0; --ink-2:#B4C4CD; --ink-3:#8194A0;
+    --rule:#2C3D47; --rule-soft:#22313A;
+    --accent:#4FBFC9; --accent-soft:#12333A; --accent-ink:#06171A;
+    --panel:#050B0E; --panel-ink:#DEE7EB; --panel-ink-2:#8FA3AD; --panel-rule:#22333C;
+    --p1:#7CA5FF; --p2:#B58BFF; --p3:#5FCB86; --p4:#DDB44A; --p5:#FF9057; --p6:#FF7BAE;
+    --warn:#FFAE85; --warn-bg:#2A1710;
+    --bar:#4FBFC9; --bar-track:#1E2B33;
+    --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 28px -20px rgba(0,0,0,.9);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0A1014; --sheet:#111A20; --card:#162128;
+  --ink:#E4ECF0; --ink-2:#B4C4CD; --ink-3:#8194A0;
+  --rule:#2C3D47; --rule-soft:#22313A;
+  --accent:#4FBFC9; --accent-soft:#12333A; --accent-ink:#06171A;
+  --panel:#050B0E; --panel-ink:#DEE7EB; --panel-ink-2:#8FA3AD; --panel-rule:#22333C;
+  --p1:#7CA5FF; --p2:#B58BFF; --p3:#5FCB86; --p4:#DDB44A; --p5:#FF9057; --p6:#FF7BAE;
+  --warn:#FFAE85; --warn-bg:#2A1710;
+  --bar:#4FBFC9; --bar-track:#1E2B33;
+  --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 28px -20px rgba(0,0,0,.9);
+}
+
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:"IBM Plex Sans","Helvetica Neue",Arial,sans-serif;font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit}
+.mono{font-family:"IBM Plex Mono",ui-monospace,monospace}
+.wrap{padding:28px 20px 56px;display:flex;justify-content:center}
+.sheet{width:100%;max-width:1160px;background:var(--sheet);border:1px solid var(--rule);box-shadow:var(--shadow)}
+[hidden]{display:none!important}
+
+/* ---------- questionnaire ---------- */
+.q-shell{padding:34px 40px 40px;max-width:820px;margin:0 auto}
+.eyebrow{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:600}
+.q-shell h1{font-family:Archivo,sans-serif;font-weight:800;font-size:clamp(30px,4.4vw,48px);line-height:1;letter-spacing:-.02em;margin:8px 0 14px;text-transform:uppercase;text-wrap:balance}
+.q-shell h1 em{font-style:normal;color:var(--accent)}
+.lede{color:var(--ink-2);font-size:16px;max-width:62ch;margin:0 0 10px}
+.lede b{color:var(--ink);font-weight:600}
+.small{font-size:13px;color:var(--ink-3)}
+.progress{display:flex;align-items:center;gap:14px;margin:0 0 26px}
+.progress .track{flex:1;height:4px;background:var(--rule-soft);position:relative}
+.progress .fill{position:absolute;left:0;top:0;bottom:0;background:var(--accent);transition:width .25s}
+.progress .n{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.1em;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.section-tag{display:inline-flex;align-items:center;gap:8px;font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--lvl,var(--accent));font-weight:600;margin-bottom:10px}
+.section-tag i{display:inline-block;width:22px;height:2px;background:var(--lvl,var(--accent))}
+.q-title{font-family:Archivo,sans-serif;font-weight:700;font-size:clamp(21px,2.6vw,28px);line-height:1.15;letter-spacing:-.01em;margin:0 0 8px;text-wrap:balance}
+.q-help{color:var(--ink-2);margin:0 0 20px;max-width:64ch}
+.q-help i{color:var(--ink-3)}
+
+.opts{display:grid;gap:10px;margin:0 0 6px}
+.opt{display:grid;grid-template-columns:22px minmax(0,1fr);gap:12px;align-items:start;background:var(--card);border:1px solid var(--rule-soft);padding:13px 15px;cursor:pointer;transition:border-color .12s,background .12s}
+.opt:hover{border-color:var(--rule)}
+.opt:has(input:checked){border-color:var(--accent);background:var(--accent-soft)}
+.opt:has(input:focus-visible){outline:2px solid var(--accent);outline-offset:2px}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt .box{width:18px;height:18px;border:1.5px solid var(--rule);border-radius:50%;margin-top:2px;position:relative;background:var(--sheet)}
+.opt.multi .box{border-radius:3px}
+.opt:has(input:checked) .box{border-color:var(--accent);background:var(--accent)}
+.opt:has(input:checked) .box::after{content:"";position:absolute;inset:4px;background:var(--accent-ink);border-radius:inherit}
+.opt .t{font-weight:600;color:var(--ink);line-height:1.35}
+.opt .d{font-size:13px;color:var(--ink-3);margin-top:2px;line-height:1.4}
+
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.field label{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+.field input,.field textarea{font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--rule);padding:11px 13px;width:100%}
+.field input:focus,.field textarea:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
+.field textarea{min-height:88px;resize:vertical}
+
+.rate{display:grid;gap:10px}
+.rate .row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;align-items:center;background:var(--card);border:1px solid var(--rule-soft);padding:12px 15px}
+.rate .row .lab b{display:block;color:var(--ink);font-weight:600}
+.rate .row .lab span{font-size:13px;color:var(--ink-3);line-height:1.35}
+.rate .row .lab .dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:7px;vertical-align:1px;background:var(--pc,var(--accent))}
+.scale{display:flex;gap:6px}
+.scale label{position:relative;display:block}
+.scale input{position:absolute;opacity:0;pointer-events:none}
+.scale span{display:grid;place-items:center;width:38px;height:38px;border:1px solid var(--rule);border-radius:50%;font-family:"IBM Plex Mono",monospace;font-size:13px;cursor:pointer;color:var(--ink-2);background:var(--sheet);user-select:none}
+.scale label:hover span{border-color:var(--accent)}
+.scale input:checked + span{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
+.scale input:focus-visible + span{outline:2px solid var(--accent);outline-offset:2px}
+.scale-key{display:flex;justify-content:space-between;font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.08em;color:var(--ink-3);text-transform:uppercase;margin-top:8px}
+
+.nav{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:26px;padding-top:18px;border-top:1px solid var(--rule-soft)}
+.btn{border:1px solid var(--rule);background:var(--card);padding:11px 18px;cursor:pointer;font-weight:600;display:inline-flex;align-items:center;gap:8px}
+.btn:hover{border-color:var(--ink-3)}
+.btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.primary:hover{filter:brightness(1.05)}
+.btn.ghost{border-color:transparent;background:transparent;color:var(--ink-3)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.err{color:var(--warn);font-size:13px;min-height:1.2em}
+
+/* ---------- result map ---------- */
+.map{padding:34px 34px 0}
+.mast{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:28px;align-items:end;padding-bottom:18px;border-bottom:2px solid var(--ink)}
+.mast h1{font-family:Archivo,sans-serif;font-weight:800;font-size:clamp(28px,4vw,46px);line-height:.98;letter-spacing:-.02em;margin:6px 0 10px;text-transform:uppercase;text-wrap:balance}
+.mast h1 em{font-style:normal;color:var(--accent)}
+.mast .deck{color:var(--ink-2);font-size:15px;max-width:66ch;margin:0}
+.mast .deck b{color:var(--ink);font-weight:600}
+.meta{display:flex;flex-direction:column;gap:6px;font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);text-align:right}
+.meta b{color:var(--ink);font-weight:600}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;padding:14px 0 0}
+
+.atlas{display:grid;grid-template-columns:minmax(0,1fr) 270px;gap:0 26px;padding-top:6px}
+.levels{display:flex;flex-direction:column}
+.level{display:grid;grid-template-columns:64px minmax(0,1fr);gap:0 18px;padding:24px 0;border-bottom:1px solid var(--rule)}
+.gutter{position:relative}
+.gutter .num{font-family:Archivo,sans-serif;font-weight:800;font-size:46px;line-height:.8;letter-spacing:-.04em;color:transparent;-webkit-text-stroke:1.5px var(--lvl,var(--accent))}
+.gutter .lvl{position:absolute;top:58px;left:5px;transform-origin:left top;transform:rotate(90deg);font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--lvl,var(--accent));white-space:nowrap;font-weight:600}
+.lvl-head{margin-bottom:14px}
+.lvl-head h2{font-family:Archivo,sans-serif;font-weight:700;font-size:21px;line-height:1.1;margin:0 0 5px;letter-spacing:-.01em}
+.lvl-head p{margin:0;color:var(--ink-2);font-size:13.5px;max-width:80ch}
+
+.grid{display:grid;gap:12px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.card{background:var(--card);border:1px solid var(--rule-soft);padding:13px 14px 15px;display:flex;flex-direction:column;gap:8px}
+.card h3{font-family:"IBM Plex Mono",monospace;font-size:10.5px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;margin:0;color:var(--lvl,var(--accent))}
+.card .big{font-family:Archivo,sans-serif;font-weight:700;font-size:17px;line-height:1.15;letter-spacing:-.01em;color:var(--ink)}
+.card p{margin:0;font-size:13px;line-height:1.45;color:var(--ink-2)}
+.card p b{color:var(--ink);font-weight:600}
+.card ul{margin:0;padding-left:16px;display:flex;flex-direction:column;gap:5px}
+.card li{font-size:13px;line-height:1.42;color:var(--ink-2)}
+.card li b{color:var(--ink);font-weight:600}
+.card .note{font-size:12px;color:var(--ink-3);font-style:italic;border-top:1px solid var(--rule-soft);padding-top:8px;margin-top:auto}
+.card.alert{background:var(--warn-bg)}
+.card.alert h3{color:var(--warn)}
+.pill{display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;border:1px solid currentColor;color:var(--accent);border-radius:2px}
+.pill.warn{color:var(--warn)}
+.pill.ok{color:var(--p3)}
+
+/* pillar profile chart: one measure (1–5), one hue; identity lives in the row label */
+.chart{display:grid;gap:7px;margin-top:4px}
+.chart .r{display:grid;grid-template-columns:176px minmax(0,1fr) 28px;gap:10px;align-items:center;font-size:13px}
+.chart .r .lab{display:flex;align-items:center;gap:8px;color:var(--ink);font-weight:600}
+.chart .r .lab .dot{width:9px;height:9px;border-radius:50%;flex:none;background:var(--pc)}
+.chart .r .track{height:10px;background:var(--bar-track);position:relative}
+.chart .r .bar{position:absolute;left:0;top:0;bottom:0;background:var(--bar);border-radius:0 3px 3px 0}
+.chart .r.outlier .bar{background:var(--warn)}
+.chart .r .v{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink-2);text-align:right;font-variant-numeric:tabular-nums}
+.chart .r .tag{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--warn);margin-left:6px;font-weight:600}
+.chart .r.top .tag{color:var(--accent)}
+.chart-foot{display:flex;justify-content:space-between;font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin-top:4px;padding-left:186px;padding-right:38px}
+
+.steps{counter-reset:s;display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.steps li{counter-increment:s;position:relative;padding-left:26px;font-size:13px;line-height:1.42;color:var(--ink-2)}
+.steps li::before{content:counter(s,decimal-leading-zero);position:absolute;left:0;top:1px;font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--lvl,var(--accent));font-weight:600}
+.steps li b{color:var(--ink);font-weight:600}
+
+.pairs{display:grid;border-top:1px solid var(--rule-soft)}
+.pair{display:grid;grid-template-columns:minmax(0,1fr) 14px minmax(0,1.15fr);gap:10px;align-items:baseline;padding:7px 0;border-bottom:1px solid var(--rule-soft);font-size:13px}
+.pair .f{color:var(--warn);font-weight:600}.pair .a{color:var(--ink-3);font-family:"IBM Plex Mono",monospace;font-size:11px}.pair .c{color:var(--ink-2)}
+
+.tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.tile{border:1px dashed var(--rule);padding:11px 12px}
+.tile h4{font-family:Archivo,sans-serif;font-size:13.5px;font-weight:700;margin:0 0 4px;line-height:1.15}
+.tile p{margin:0;font-size:12.5px;line-height:1.4;color:var(--ink-3)}
+.tile .why{display:block;font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:4px}
+
+.spine{background:var(--panel);color:var(--panel-ink);padding:24px 20px 26px;display:flex;flex-direction:column;gap:16px;align-self:stretch}
+.spine-title{font-family:Archivo,sans-serif;font-weight:800;font-size:19px;line-height:1.05;text-transform:uppercase;margin:0;color:#fff}
+.spine-lede{margin:0;font-size:12.5px;line-height:1.5;color:var(--panel-ink-2)}
+.sblock h4{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;margin:0 0 8px;color:var(--accent);font-weight:600}
+.sblock p{margin:0 0 6px;font-size:12.5px;line-height:1.45;color:var(--panel-ink-2)}
+.sblock p b{color:var(--panel-ink);font-weight:600}
+.spine hr{border:0;border-top:1px solid var(--panel-rule);margin:0}
+.spine .closer{font-size:12.5px;line-height:1.5;color:var(--panel-ink);border-left:2px solid var(--accent);padding-left:11px;margin:0}
+
+.foot{display:grid;grid-template-columns:64px minmax(0,1fr);gap:18px;padding:24px 0 30px;border-top:2px solid var(--ink)}
+.foot .num{font-family:Archivo,sans-serif;font-weight:800;font-size:46px;line-height:.8;color:transparent;-webkit-text-stroke:1.5px var(--accent)}
+.foot h2{font-family:Archivo,sans-serif;font-weight:700;font-size:20px;margin:0 0 6px;text-transform:uppercase}
+.foot p{margin:0 0 10px;font-size:13.5px;line-height:1.55;color:var(--ink-2);max-width:88ch}
+.foot textarea{font:inherit;font-size:14px;line-height:1.55;color:var(--ink);background:var(--card);border:1px solid var(--rule);padding:12px 14px;width:100%;min-height:150px;resize:vertical}
+.foot textarea:focus{outline:2px solid var(--accent);outline-offset:1px}
+.src{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.05em;color:var(--ink-3);line-height:1.6;margin-top:14px;padding-top:12px;border-top:1px solid var(--rule-soft)}
+
+.diag{border:1px solid var(--rule);background:var(--card);padding:16px 18px;margin-top:14px}
+.diag h3{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;margin:0 0 8px;color:var(--accent);font-weight:600}
+.diag p{margin:0;font-size:14.5px;line-height:1.6;color:var(--ink-2);white-space:pre-wrap}
+.diag .hint{font-size:12px;color:var(--ink-3);margin-top:8px}
+
+@media (max-width:1000px){
+  .atlas{grid-template-columns:minmax(0,1fr)}
+  .spine{margin-top:20px}
+  .g3,.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:680px){
+  .q-shell{padding:24px 18px 30px}
+  .map{padding:22px 16px 0}
+  .mast{grid-template-columns:minmax(0,1fr)}
+  .meta{text-align:left}
+  .level{grid-template-columns:minmax(0,1fr);gap:12px}
+  .gutter{display:flex;align-items:baseline;gap:12px}
+  .gutter .num{font-size:34px}
+  .gutter .lvl{position:static;transform:none}
+  .g2,.g3,.tiles{grid-template-columns:minmax(0,1fr)}
+  .chart .r{grid-template-columns:130px minmax(0,1fr) 26px}
+  .chart-foot{padding-left:140px}
+  .rate .row{grid-template-columns:minmax(0,1fr)}
+  .foot{grid-template-columns:minmax(0,1fr)}
+}
+@media (prefers-reduced-motion:reduce){.progress .fill{transition:none}}
+@media print{
+  body{background:#fff}
+  .wrap{padding:0}
+  .sheet{max-width:none;border:0;box-shadow:none}
+  .toolbar,.diag .hint,.diag button{display:none!important}
+  .level,.card,.spine .sblock{break-inside:avoid}
+  .lvl-head{break-after:avoid}
+  .spine{background:#fff;color:var(--ink);border:1px solid var(--rule)}
+  .spine-title{color:var(--ink)}
+  .sblock p{color:var(--ink-2)}.sblock p b{color:var(--ink)}
+  .spine .closer{color:var(--ink)}
+  .spine hr{border-top-color:var(--rule-soft)}
+  .foot textarea{border:1px solid var(--rule);min-height:auto}
+}
+</style>
+
+<div class="wrap">
+<div class="sheet">
+
+  <!-- ================= QUESTIONNAIRE ================= -->
+  <section id="quiz" class="q-shell" aria-live="polite">
+    <div id="intro">
+      <span class="eyebrow">Future of Cities · Dr. Fatime Barbara Hegyi</span>
+      <h1>Your City<br><em>Intelligence Map</em></h1>
+      <p class="lede">Thirteen questions about the city you work in and how your institution actually behaves. At the end you get a personalised version of the Map of City Intelligence: <b>where your system breaks the chain between evidence and action, which pillar to move first, the traps your design is exposed to, and what the work asks of you.</b></p>
+      <p class="lede">About eight minutes. There are no right answers — score what you observe, not what the city reports about itself. Nothing you type leaves your browser unless you choose to share the result.</p>
+      <div class="nav" style="border-top:0;padding-top:6px;justify-content:flex-start">
+        <button class="btn primary" id="startBtn">Begin</button>
+        <button class="btn ghost" id="resumeBtn" hidden>Resume where I left off</button>
+      </div>
+    </div>
+
+    <div id="stepWrap" hidden>
+      <div class="progress"><span class="n" id="progN">01 / 13</span><div class="track"><div class="fill" id="progFill"></div></div></div>
+      <div id="step"></div>
+      <div class="err" id="err"></div>
+      <div class="nav">
+        <button class="btn ghost" id="backBtn">← Back</button>
+        <button class="btn primary" id="nextBtn">Next →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= RESULT ================= -->
+  <section id="result" class="map" hidden></section>
+
+</div>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ---------------- framework data ---------------- */
+const PILLARS = [
+  {k:"foundational", n:"Foundational",   c:"var(--p1)", d:"participation, education, digital access, institutional trust"},
+  {k:"innovator",    n:"Innovator",      c:"var(--p2)", d:"knowledge generation and the translation of R&D into use"},
+  {k:"integrator",   n:"Integrator",     c:"var(--p3)", d:"governance coherence, policy responsiveness, safety"},
+  {k:"regenerative", n:"Regenerative",   c:"var(--p4)", d:"climate resilience, air quality, renewable energy"},
+  {k:"connected",    n:"Connected",      c:"var(--p5)", d:"international flows, cultural diversity, data interoperability"},
+  {k:"healthy",      n:"Healthy Society",c:"var(--p6)", d:"health outcomes, mental well-being, access to care"}
+];
+const P = Object.fromEntries(PILLARS.map(p=>[p.k,p]));
+const CONDITIONS = [
+  {k:"circulation", n:"Circulation",  d:"Information crosses departments and reaches decision-makers before the crisis."},
+  {k:"feedback",    n:"Feedback",     d:"The system learns what its own actions produce and integrates it."},
+  {k:"alignment",   n:"Alignment",    d:"The people who know are deliberately connected to the people who decide."},
+  {k:"horizon",     n:"Time horizon", d:"Long-term structural capacity is protected against short-term pressure."}
+];
+const C = Object.fromEntries(CONDITIONS.map(c=>[c.k,c]));
+
+const LENS = {
+  fix:    {name:"The machine lens", text:"Your first question treats the challenge as an object to be fixed. That is how most institutions are built to respond, and it is why the same problem keeps coming back in a new form. The move is to hold the fix for one beat and ask what pattern, over three years, has been producing this event.", practice:"the structural question habit"},
+  pattern:{name:"The living-system lens", text:"Your first question already goes to the pattern behind the event. The risk for practitioners who think this way is different: the diagnosis becomes the work, and the first move never gets designed. Level 03 of this map is where your attention belongs.", practice:"the personal feedback loop"},
+  blame:  {name:"The accountability lens", text:"Your first question locates a person before it locates a pattern. Accountability matters — but in a living system the person who is responsible is usually responding rationally to a structure nobody designed. Name the structure first; the accountability question gets sharper afterwards.", practice:"the structural question habit"},
+  data:   {name:"The evidence lens", text:"Your first question goes to the data. That is the right instinct and an incomplete one: evidence is what the system knows, intelligence is whether it acts on what it knows. Cities are rarely short of evidence. Ask, alongside the data question, where the chain from evidence to decision breaks.", practice:"reading against the metric"}
+};
+const FLOWS = {
+  people:      {n:"People",      text:"Commuting, migration, footfall. Footfall drifting away from a neighbourhood market signals economic stress months before any official dataset registers it.", signal:"a change in footfall, commuting or who is leaving a district"},
+  information: {n:"Information", text:"Data streams, digital channels, weak signals, rumour. A rise in rumour about safety precedes the crime statistics by weeks — and tells you where trust is thinning.", signal:"a change in what people are saying to each other before it reaches you"},
+  resources:   {n:"Resources",   text:"Energy, goods, water, materials. Where cost concentrates — energy in the oldest housing stock, for instance — is where the next health gap is already forming.", signal:"where a resource cost is concentrating in one part of the city"},
+  emotions:    {n:"Emotions",    text:"Collective mood, trust, social energy. When people stop reporting problems because nothing happened last time, the system has lost a sensor and does not know it.", signal:"a fall in reporting, turnout or participation — people going quiet"}
+};
+const FAIL = {
+  fragmentation:  {n:"Fragmentation",        text:"Data sits in departmental silos. Housing and health hold the same households in two systems that never meet.", cond:"circulation", counter:"a shared accountability framework — one place where the departments that hold the pieces are obliged to assemble them"},
+  overmeasurement:{n:"Over-measurement",     text:"Many KPIs, no prioritisation. Twelve dashboards, and no one can say which number the city is actually trying to move.", cond:"alignment", counter:"one shared outcome metric that cannot be substituted"},
+  translation:    {n:"The translation gap",  text:"Insight exists but never reaches the decision. The evaluation lands after the budget has been set.", cond:"alignment", counter:"a standing link between the people who hold the analysis and the committee that decides"},
+  incentives:     {n:"Misaligned incentives",text:"Political cycles override long-term outcomes. The target was met and the outcome did not move.", cond:"horizon", counter:"a shared outcome metric and a transition-proofing protocol that survives the next mandate"},
+  shorttermism:   {n:"Short-termism",        text:"The system reacts to crises, not to signals. Everything is urgent, so nothing structural gets funded.", cond:"horizon", counter:"a protected long-horizon line in the budget and a named steward for it"}
+};
+const DEATH = {
+  mandate:{n:"Mandate fragmentation",       counter:"a shared accountability framework with a named deputy and a standing cross-department review"},
+  metric: {n:"Metric substitution",         counter:"one published outcome metric — on the city dashboard, where it cannot quietly be replaced"},
+  cycle:  {n:"Political cycle truncation",  counter:"a transition-proofing protocol signed before the election, not after"},
+  capture:{n:"Institutional capture",       counter:"a structural protection mechanism — an external panel with the right to publish"}
+};
+const POSTURE = {
+  optimiser:{n:"The Optimiser", d:"performance, efficiency, delivery of measurable results", shift:"define one measurable outcome and a date for your current project, and publish both"},
+  translator:{n:"The Translator", d:"bridges fragmented data, diverse stakeholders and siloed institutions", shift:"put the team that holds the data and the committee that decides in the same room, once, before the next budget"},
+  steward:{n:"The Steward", d:"holds long-term direction, protects future capacity and dignity", shift:"write the ten-year cost of not acting before the next budget meeting — and name who carries the strategy if you leave"},
+  listener:{n:"The Systems Listener", d:"weak signals, feedback loops, lived experience — the most underused posture in institutional settings", shift:"bring one frontline worker into the next design meeting, and spend the first hour of the next review on what the numbers do not show"}
+};
+const DEMAND = {
+  honesty:   {n:"Intellectual honesty",     practice:"reading against the metric", why:"the discipline of asking, of every number you present, what it conceals — including the ones that support the strategy you already announced"},
+  patience:  {n:"Patience with complexity", practice:"the structural question habit", why:"asking what produces the pattern before proposing a fix slows the reflex that turns every delay into a failure"},
+  continuity:{n:"Continuity of commitment", practice:"the personal feedback loop", why:"a dated review, written now, is what carries a commitment past the twelve-month mark where most of them quietly stop"}
+};
+const HORIZON = {
+  circulation:{h:"Shared data infrastructure", p:"A data-sharing agreement between the departments — or the city and the health authority — that currently hold the same households in separate systems."},
+  feedback:   {h:"Participatory sensing",      p:"Ethnographic and mixed-method work where weak signals actually live, feeding a feedback mechanism the institution is obliged to read."},
+  alignment:  {h:"A standing knowledge–decision link", p:"A permanent route from the people who hold the analysis to the people who decide — a panel, a review, a seat — rather than an evaluation that arrives after the budget."},
+  horizon:    {h:"Transition-proofed governance", p:"Protocols that carry a strategy across a change of administration, and a standing scenario review before any ten-year commitment."}
+};
+const DELAY = {
+  "6m":  {label:"six months",      exposure:"high",     text:"Behavioural change in mobility runs five to fifteen years; in health, decades. An institution that calls a structural intervention a failure at month six will never see one succeed — and will keep funding the visible, symptomatic alternative instead."},
+  "12m": {label:"twelve months",   exposure:"high",     text:"Twelve months is the length of a reporting cycle, not of a behavioural change. Most public-health interventions need eighteen months before results are visible; yours would be defunded at nine."},
+  "2-3y":{label:"two to three years", exposure:"moderate", text:"Two to three years covers infrastructure delays and the early part of behavioural change. It does not cover a health outcome. Design the feedback mechanism to report leading indicators inside that window, so the strategy has evidence to show before the outcome moves."},
+  "5y+": {label:"five years or more", exposure:"low",      text:"Your institution can hold direction through a systemic delay. The risk is the opposite one: patience without a feedback mechanism is not stewardship, it is a bet. Make sure something is being read every six months."}
+};
+
+/* ---------------- questions ---------------- */
+const STEPS = [
+ {id:"who", lvl:"", tag:"About you", title:"Who is filling this in?",
+  help:"The map is written for one practitioner carrying one challenge in one city.",
+  type:"form", fields:[
+    {k:"role", label:"Your role", type:"single", opts:[
+      ["leader","City leader or director","Mayor, deputy, chief executive, head of department"],
+      ["policy","Policymaker","Strategy, planning, programme design in a public institution"],
+      ["research","Researcher","Academic or applied research on cities"],
+      ["practitioner","Practitioner or civic organisation","NGO, agency, consultancy, community organisation"],
+      ["other","Something else",""]]},
+    {k:"city", label:"The city (optional)", type:"text", ph:"e.g. Brussels"},
+    {k:"challenge", label:"The challenge you are carrying", type:"textarea", ph:"One sentence. The thing that lands on your desk and will not go away.", req:true}
+  ]},
+ {id:"lens", lvl:"var(--p1)", tag:"01 · Seeing", title:"When a problem lands on your desk, which question comes first?",
+  help:"Be honest — the question you actually ask, not the one you would like to ask.",
+  type:"single", k:"firstQuestion", opts:[
+    ["fix","How do we fix this?","The event is the problem. Find the solution, deliver it."],
+    ["pattern","What pattern is producing this?","The event is a symptom. Find the structure behind it."],
+    ["blame","Who is responsible for this?","Locate the owner, then the response."],
+    ["data","What does the data say?","Go to the evidence first, then decide."]]},
+ {id:"flow", lvl:"var(--p1)", tag:"01 · Seeing", title:"Which of the four urban flows do you watch least?",
+  help:"A city's intelligence lives in what moves. Every practitioner has one flow they are structurally blind to.",
+  type:"single", k:"flowBlind", opts:[
+    ["people","People","Commuting, migration, footfall — who is moving where"],
+    ["information","Information","Data streams, digital channels, weak signals, rumour"],
+    ["resources","Resources","Energy, goods, water, materials — where cost concentrates"],
+    ["emotions","Emotions","Collective mood, trust, social energy — who has gone quiet"]]},
+ {id:"fail", lvl:"var(--p1)", tag:"01 · Seeing", title:"Where does the chain between evidence and action break most often in your system?",
+  help:"Think of a decision where the evidence existed and the decision did not follow it. Which of these was responsible?",
+  type:"single", k:"failureMode", opts:[
+    ["fragmentation","Fragmentation","The data was there, split across departments that never meet"],
+    ["overmeasurement","Over-measurement","Too many indicators, no priority among them"],
+    ["translation","The translation gap","The insight existed and never reached the decision"],
+    ["incentives","Misaligned incentives","The target was met; the outcome did not move"],
+    ["shorttermism","Short-termism","The crisis got funded, the signal did not"]]},
+ {id:"cond", lvl:"var(--p3)", tag:"02 · Measuring", title:"Rate the four conditions of intelligence in your own system",
+  help:"1 = absent, 5 = structurally protected. Score what you observe.",
+  type:"rate", k:"conditions", rows:CONDITIONS.map(c=>({k:c.k, n:c.n, d:c.d}))},
+ {id:"pillars", lvl:"var(--p3)", tag:"02 · Measuring", title:"Score your city on the six pillars of the City Intelligence Index",
+  help:"1 = weak, 5 = strong. If you cannot score a pillar, that is itself a finding — give it a 2 and note it.",
+  type:"rate", k:"pillars", rows:PILLARS.map(p=>({k:p.k, n:p.n, d:p.d, c:p.c}))},
+ {id:"delay", lvl:"var(--p3)", tag:"02 · Measuring", title:"How long does your institution give a new intervention before someone calls it a failure?",
+  help:"Not the official evaluation window — the point at which the conversation turns.",
+  type:"single", k:"patience", opts:[
+    ["6m","About six months","Before the next reporting round"],
+    ["12m","About a year","One budget cycle"],
+    ["2-3y","Two to three years","Roughly a mandate"],
+    ["5y+","Five years or more","Beyond the current administration"]]},
+ {id:"hall", lvl:"var(--p5)", tag:"03 · Acting", title:"Think of the intervention you are designing or defending now. Which of these is true of it?",
+  help:"Tick everything that genuinely applies. If you have no live intervention, tick nothing and continue.",
+  type:"multi", k:"hallmarks", opts:[
+    ["gap","It targets the structural gap, not the symptom","It changes a connection between parts of the system, not the output of one part"],
+    ["delay","Its timeline accounts for systemic delay","The plan names when results can realistically appear"],
+    ["spillover","It is designed to spill over into adjacent pillars","Success in one pillar is expected to lift another"],
+    ["feedback","The feedback mechanism was built in at the design stage","Not scheduled for year three — written into the intervention itself"]]},
+ {id:"scale", lvl:"var(--p5)", tag:"03 · Acting", title:"Are you under pressure to scale before the first move has had time to work?",
+  help:"City-wide in year one, twelve districts at once, a launch date set before the pilot has reported.",
+  type:"single", k:"scalePressure", opts:[
+    ["yes","Yes — the roll-out is already expected",""],
+    ["no","No — one place, one full cycle, then decide",""]]},
+ {id:"death", lvl:"var(--p5)", tag:"03 · Acting", title:"How do strategies usually die in your institution?",
+  help:"Not why they fail on paper — how they actually stop.",
+  type:"single", k:"strategyDeath", opts:[
+    ["mandate","Mandate fragmentation","Everyone owns a piece, no one owns the whole"],
+    ["metric","Metric substitution","The outcome measure is quietly replaced by an output one"],
+    ["cycle","Political cycle truncation","The election arrives before the delay is over"],
+    ["capture","Institutional capture","The strategy is absorbed by the interests it was meant to change"]]},
+ {id:"pdom", lvl:"", tag:"The spine", title:"Which professional posture dominates your practice?",
+  help:"These are cognitive modes, not roles. Which one runs most of your working week?",
+  type:"single", k:"postureDominant", opts:Object.entries(POSTURE).map(([k,v])=>[k,v.n,v.d])},
+ {id:"pweak", lvl:"", tag:"The spine", title:"And which posture is most underdeveloped?",
+  help:"The one you reach for least — or that your institution gives you least room to use.",
+  type:"single", k:"postureWeak", opts:Object.entries(POSTURE).map(([k,v])=>[k,v.n,v.d]), exclude:"postureDominant"},
+ {id:"demand", lvl:"", tag:"The spine", title:"Of the three demands the work makes, where are you thinnest?",
+  help:"Every practitioner is thinner on one of these than they would like to admit.",
+  type:"single", k:"demandThin", opts:[
+    ["honesty","Intellectual honesty","Including about what your own diagnosis cannot see"],
+    ["patience","Patience with complexity","Holding direction through a delay without losing nerve"],
+    ["continuity","Continuity of commitment","Beyond the reporting cycle, beyond the mandate"]]}
+];
+
+/* ---------------- state ---------------- */
+const KEY="cim-profiler-v1";
+let A = {}; let i = 0;
+function load(){ try{ const s=localStorage.getItem(KEY); if(s){ const o=JSON.parse(s); if(o&&o.A){ A=o.A; i=o.i||0; return true; } } }catch(e){} return false; }
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify({A,i})); }catch(e){} }
+function clear(){ try{ localStorage.removeItem(KEY); }catch(e){} }
+
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+/* ---------------- questionnaire rendering ---------------- */
+function renderStep(){
+  const st=STEPS[i];
+  $("#progN").textContent=String(i+1).padStart(2,"0")+" / "+String(STEPS.length).padStart(2,"0");
+  $("#progFill").style.width=((i)/STEPS.length*100)+"%";
+  $("#err").textContent="";
+  let h=`<div class="section-tag" style="--lvl:${st.lvl||"var(--accent)"}"><i></i>${esc(st.tag)}</div><h2 class="q-title">${esc(st.title)}</h2><p class="q-help">${esc(st.help)}</p>`;
+  if(st.type==="form"){
+    st.fields.forEach(f=>{
+      if(f.type==="single"){
+        h+=`<div class="field"><label>${esc(f.label)}</label></div><div class="opts" role="radiogroup" aria-label="${esc(f.label)}">`+f.opts.map(o=>opt(f.k,o,A[f.k]===o[0],false)).join("")+`</div><div style="height:14px"></div>`;
+      }else if(f.type==="text"){
+        h+=`<div class="field"><label for="f_${f.k}">${esc(f.label)}</label><input id="f_${f.k}" data-k="${f.k}" type="text" placeholder="${esc(f.ph||"")}" value="${esc(A[f.k]||"")}"></div>`;
+      }else{
+        h+=`<div class="field"><label for="f_${f.k}">${esc(f.label)}${f.req?"":""}</label><textarea id="f_${f.k}" data-k="${f.k}" placeholder="${esc(f.ph||"")}">${esc(A[f.k]||"")}</textarea></div>`;
+      }
+    });
+  }else if(st.type==="single"){
+    const ex = st.exclude ? A[st.exclude] : null;
+    h+=`<div class="opts" role="radiogroup">`+st.opts.filter(o=>o[0]!==ex).map(o=>opt(st.k,o,A[st.k]===o[0],false)).join("")+`</div>`;
+  }else if(st.type==="multi"){
+    const cur=new Set(A[st.k]||[]);
+    h+=`<div class="opts">`+st.opts.map(o=>opt(st.k,o,cur.has(o[0]),true)).join("")+`</div>`;
+  }else if(st.type==="rate"){
+    const cur=A[st.k]||{};
+    h+=`<div class="rate">`+st.rows.map(r=>`<div class="row" style="--pc:${r.c||"var(--accent)"}"><div class="lab"><b>${r.c?'<span class="dot"></span>':""}${esc(r.n)}</b><span>${esc(r.d)}</span></div><div class="scale" role="radiogroup" aria-label="${esc(r.n)}">`+[1,2,3,4,5].map(v=>`<label><input type="radio" name="${st.k}_${r.k}" value="${v}" ${cur[r.k]==v?"checked":""}><span>${v}</span></label>`).join("")+`</div></div>`).join("")+`</div><div class="scale-key"><span>1 — absent / weak</span><span>5 — structurally protected / strong</span></div>`;
+  }
+  $("#step").innerHTML=h;
+  $("#backBtn").disabled = i===0;
+  $("#nextBtn").textContent = i===STEPS.length-1 ? "Build my map →" : "Next →";
+  const first=$("#step").querySelector("input,textarea"); if(first) first.focus({preventScroll:true});
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function opt(k,o,checked,multi){
+  return `<label class="opt${multi?" multi":""}"><input type="${multi?"checkbox":"radio"}" name="${k}" value="${esc(o[0])}" ${checked?"checked":""}><span class="box"></span><span><span class="t">${esc(o[1])}</span>${o[2]?`<span class="d">${esc(o[2])}</span>`:""}</span></label>`;
+}
+function collect(){
+  const st=STEPS[i]; const root=$("#step");
+  if(st.type==="form"){
+    st.fields.forEach(f=>{
+      if(f.type==="single"){ const r=root.querySelector(`input[name="${f.k}"]:checked`); if(r) A[f.k]=r.value; }
+      else { const el=root.querySelector(`[data-k="${f.k}"]`); A[f.k]=el.value.trim(); }
+    });
+    const missing=st.fields.filter(f=>(f.req||f.type==="single") && !A[f.k]);
+    if(missing.length) return "Please answer: "+missing.map(f=>f.label.toLowerCase()).join(", ")+".";
+  }else if(st.type==="single"){
+    const r=root.querySelector(`input[name="${st.k}"]:checked`); if(!r) return "Choose one to continue."; A[st.k]=r.value;
+  }else if(st.type==="multi"){
+    A[st.k]=[...root.querySelectorAll(`input[name="${st.k}"]:checked`)].map(x=>x.value);
+  }else if(st.type==="rate"){
+    const o={}; let miss=[];
+    st.rows.forEach(r=>{ const c=root.querySelector(`input[name="${st.k}_${r.k}"]:checked`); if(c) o[r.k]=+c.value; else miss.push(r.n); });
+    if(miss.length) return "Score every row — missing: "+miss.join(", ")+".";
+    A[st.k]=o;
+  }
+  return "";
+}
+
+$("#startBtn").addEventListener("click",()=>{ A={}; i=0; $("#intro").hidden=true; $("#stepWrap").hidden=false; renderStep(); });
+$("#resumeBtn").addEventListener("click",()=>{ $("#intro").hidden=true; $("#stepWrap").hidden=false; renderStep(); });
+$("#backBtn").addEventListener("click",()=>{ collect(); if(i>0){ i--; save(); renderStep(); } });
+$("#nextBtn").addEventListener("click",()=>{
+  const e=collect(); if(e){ $("#err").textContent=e; return; }
+  if(i<STEPS.length-1){ i++; save(); renderStep(); } else { save(); showResult(); }
+});
+document.addEventListener("keydown",ev=>{ if(ev.key==="Enter" && !$("#stepWrap").hidden && ev.target.tagName!=="TEXTAREA"){ ev.preventDefault(); $("#nextBtn").click(); } });
+
+/* ---------------- rules engine ---------------- */
+const ORDER=["foundational","integrator","healthy","regenerative","connected","innovator"]; // tie-break: the floor first
+function analyse(A){
+  const R={};
+  const pv=A.pillars, cv=A.conditions;
+  const sortedP=[...ORDER].sort((a,b)=>pv[a]-pv[b]||ORDER.indexOf(a)-ORDER.indexOf(b));
+  R.outlier=sortedP[0]; R.strength=[...ORDER].sort((a,b)=>pv[b]-pv[a]||ORDER.indexOf(a)-ORDER.indexOf(b))[0];
+  R.flat = (pv[R.strength]-pv[R.outlier])<=1;
+  const conds=[...CONDITIONS].sort((a,b)=>cv[a.k]-cv[b.k]||CONDITIONS.indexOf(a)-CONDITIONS.indexOf(b));
+  R.weakCond=conds[0].k;
+  R.floorFails = pv.foundational<=2 && R.outlier!=="foundational";
+  // broken connection
+  const pairs=[
+    ["innovator","foundational","Innovator ↔ Foundational","Research capacity is being generated on a weak floor — it cannot become equitable outcomes without participation, digital access and trust underneath it."],
+    ["regenerative","healthy","Regenerative ↔ Healthy Society","Green and climate investment is not reaching the districts with the worst health outcomes — the pillar is strong on the city average and absent where it is needed."],
+    ["integrator","healthy","Integrator ↔ Healthy Society","Governance reads as coherent, and health outcomes are not responding — the coherence is administrative, not structural."],
+    ["connected","foundational","Connected ↔ Foundational","Openness and interoperability are built on a weak floor — the flows connect the city to the world faster than they connect its own districts to each other."],
+    ["innovator","integrator","Innovator ↔ Integrator","Knowledge is generated and not governed — R&D output has no route into policy responsiveness."],
+    ["connected","healthy","Connected ↔ Healthy Society","The city is well connected outward and its residents are not well — the flows that bring diversity and data do not carry care."],
+    ["regenerative","foundational","Regenerative ↔ Foundational","Climate capacity is being built above a floor that cannot hold it — resilience without participation is delivered to people, not with them."]
+  ];
+  R.connection=null;
+  for(const [hi,lo,name,text] of pairs){ if(pv[hi]-pv[lo]>=2 && pv[hi]>=3){ R.connection={hi,lo,name,text}; break; } }
+  if(!R.connection && !R.flat){
+    R.connection={hi:R.strength,lo:R.outlier,name:P[R.strength].n+" ↔ "+P[R.outlier].n,text:`${P[R.strength].n} is carrying the city's profile and ${P[R.outlier].n} is not benefiting from it. The question is which decisions keep those two apart.`};
+  }
+  // first move & sequence
+  R.movePillar = R.floorFails ? "foundational" : R.outlier;
+  const seq=[]; const push=(k,why)=>{ if(k && !seq.find(s=>s.k===k)) seq.push({k,why}); };
+  if(R.floorFails) push("foundational","the floor has to hold before anything above it can carry weight");
+  push(R.outlier,"the outlier — the pillar diverging most from the rest of the profile");
+  if(R.connection) push(R.connection.lo,"the low side of the broken connection");
+  for(const k of sortedP){ if(seq.length>=3) break; push(k,"the next-lowest pillar"); }
+  R.sequence=seq.slice(0,3);
+  R.outlierTies = sortedP.filter(k=>k!==R.outlier && pv[k]===pv[R.outlier]);
+  // traps
+  R.traps=[];
+  const d=DELAY[A.patience]; if(d.exposure!=="low") R.traps.push({n:"Reading a systemic delay as failure",why:`your institution turns at ${d.label}; the behavioural change behind a structural move takes longer`});
+  if(A.scalePressure==="yes") R.traps.push({n:"Scaling before the first move has worked",why:"the roll-out is already expected"});
+  const hm=new Set(A.hallmarks||[]);
+  if(!hm.has("feedback")) R.traps.push({n:"Designing without feedback",why:"no feedback mechanism was built in at design stage — a bet, not a system"});
+  if(!hm.has("spillover")) R.traps.push({n:"The single-pillar fix",why:"the design stays inside one pillar and will meet an adjacent pillar's ceiling"});
+  R.hallmarksMissing=["gap","delay","spillover","feedback"].filter(k=>!hm.has(k));
+  R.noIntervention = hm.size===0;
+  // horizon
+  const hz=[]; const addH=(k)=>{ if(!hz.find(x=>x.k===k)) hz.push({k,...HORIZON[k]}); };
+  addH(R.weakCond); addH(FAIL[A.failureMode].cond);
+  if(A.strategyDeath==="cycle"||A.strategyDeath==="capture") addH("horizon");
+  if(R.connection) addH("circulation");
+  R.horizon=hz.slice(0,3).map(h=>{ const why = h.k===R.weakCond ? "your weakest condition" : h.k===FAIL[A.failureMode].cond ? "your dominant failure mode" : "from your strategy risk"; return {...h, why}; });
+  // attribution question
+  R.attribution = R.connection
+    ? `Which decisions, in which domains, over the last ten to fifteen years, have kept ${P[R.connection.hi].n} strong while ${P[R.connection.lo].n} stayed weak?`
+    : `Which decisions, in which domains, are producing a flat profile with no pillar strong enough to carry the others?`;
+  return R;
+}
+
+/* ---------------- result rendering ---------------- */
+function showResult(){
+  const R=analyse(A);
+  const pv=A.pillars, cv=A.conditions;
+  const today=new Date().toLocaleDateString(undefined,{year:"numeric",month:"long",day:"numeric"});
+  const roleName={leader:"City leader",policy:"Policymaker",research:"Researcher",practitioner:"Practitioner",other:"Practitioner"}[A.role];
+  const lens=LENS[A.firstQuestion], flow=FLOWS[A.flowBlind], fail=FAIL[A.failureMode], death=DEATH[A.strategyDeath];
+  const pd=POSTURE[A.postureDominant], pw=POSTURE[A.postureWeak], dm=DEMAND[A.demandThin], dl=DELAY[A.patience];
+  const mp=P[R.movePillar];
+
+  const chart = PILLARS.map(p=>{
+    const v=pv[p.k]; const cls = p.k===R.outlier ? "outlier" : p.k===R.strength && !R.flat ? "top" : "";
+    const tag = p.k===R.outlier ? '<span class="tag">outlier</span>' : (p.k===R.strength && !R.flat) ? '<span class="tag">strength</span>' : "";
+    return `<div class="r ${cls}" style="--pc:${p.c}"><div class="lab"><span class="dot"></span>${esc(p.n)}${tag}</div><div class="track" title="${esc(p.n)}: ${v} of 5"><div class="bar" style="width:${v/5*100}%"></div></div><div class="v">${v}</div></div>`;
+  }).join("");
+
+  const condRows = CONDITIONS.map(c=>`<li><b>${esc(c.n)}</b> — ${cv[c.k]} of 5${c.k===R.weakCond?' <span class="pill warn">weakest</span>':""}</li>`).join("");
+
+  const commit = `Pillar: ${mp.n}.
+Signal I will watch: ${flow.signal}.
+First move: one structural change in ${mp.n} that ${fail.counter}.
+Feedback mechanism: one indicator, published every six months, that would show the move is not working.
+Who else has to be in the room: the department that holds the data I do not.
+What I will stop doing to make room:
+Review date: ${new Date(Date.now()+365*864e5).toLocaleDateString(undefined,{year:"numeric",month:"long"})}.`;
+
+  const html = `
+  <header class="mast">
+    <div>
+      <span class="eyebrow">Your personalised map · built from your thirteen answers</span>
+      <h1>${esc(A.city||"Your city")}<br><em>City Intelligence Map</em></h1>
+      <p class="deck"><b>The challenge:</b> ${esc(A.challenge)}</p>
+    </div>
+    <div class="meta"><span><b>${esc(roleName)}</b></span><span>${esc(today)}</span><span>Future of Cities · Dr. F. B. Hegyi</span></div>
+  </header>
+  <div class="toolbar">
+    <button class="btn primary" id="printBtn">Print / save as PDF</button>
+    <button class="btn" id="diagBtn" hidden>Write my one-paragraph diagnosis</button>
+    <button class="btn ghost" id="editBtn">Change my answers</button>
+    <button class="btn ghost" id="resetBtn">Start again</button>
+  </div>
+  <div class="diag" id="diag" hidden><h3>Diagnosis</h3><p id="diagText"></p><div class="hint" id="diagHint"></div></div>
+
+  <div class="atlas">
+    <div class="levels">
+
+      <section class="level" style="--lvl:var(--p1)">
+        <div class="gutter"><div class="num">01</div><div class="lvl">Seeing</div></div>
+        <div>
+          <div class="lvl-head"><h2>How you see the city</h2><p>The lens you bring, the flow you are blind to, and the point where your system loses the chain between evidence and action.</p></div>
+          <div class="grid g3">
+            <div class="card"><h3>Your lens</h3><div class="big">${esc(lens.name)}</div><p>${esc(lens.text)}</p></div>
+            <div class="card"><h3>Your blind flow</h3><div class="big">${esc(flow.n)}</div><p>${esc(flow.text)}</p><p class="note">The weak signal you are most likely to miss: ${esc(flow.signal)}.</p></div>
+            <div class="card alert"><h3>Where your chain breaks</h3><div class="big">${esc(fail.n)}</div><p>${esc(fail.text)}</p><p class="note">This failure mode undermines the <b>${esc(C[fail.cond].n)}</b> condition — see level 02.</p></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="level" style="--lvl:var(--p3)">
+        <div class="gutter"><div class="num">02</div><div class="lvl">Measuring</div></div>
+        <div>
+          <div class="lvl-head"><h2>Your city through the instrument</h2><p>Your pillar profile as you scored it, read the way the CII is meant to be read: for the outlier, the masked strength, and the connection between them that is not working.</p></div>
+          <div class="grid g2">
+            <div class="card">
+              <h3>Pillar profile — your scores, 1 to 5</h3>
+              <div class="chart">${chart}</div>
+              <div class="chart-foot"><span>1</span><span>5</span></div>
+              ${R.flat?'<p class="note">A flat profile: no pillar is more than a point from any other. The diagnostic question changes — not "which pillar is failing" but "why is nothing strong enough to carry the rest".</p>':""}
+            </div>
+            <div class="card">
+              <h3>The three-step read</h3>
+              <ol class="steps">
+                <li><b>The outlier — ${esc(P[R.outlier].n)}.</b> Scored ${pv[R.outlier]} of 5; the pillar diverging most from the rest of your profile.${R.outlierTies.length?" Tied with "+R.outlierTies.map(k=>P[k].n).join(" and ")+" — the floor takes precedence.":""}${R.floorFails?" And Foundational is at "+pv.foundational+" — the floor is not holding.":""}</li>
+                <li><b>The broken connection — ${esc(R.connection?R.connection.name:"none clear")}.</b> ${esc(R.connection?R.connection.text:"Your scores are too even to name one. Look instead at where the four conditions fail.")}</li>
+                <li><b>The attribution question.</b> ${esc(R.attribution)}</li>
+              </ol>
+            </div>
+          </div>
+          <div class="grid g2" style="margin-top:12px">
+            <div class="card"><h3>The four conditions</h3><ul>${condRows}</ul><p class="note"><b>${esc(C[R.weakCond].n)}</b> is the condition your system most undermines. ${esc(C[R.weakCond].d)} Intelligence is emergent: this absence predicts outcomes more reliably than any single pillar score.</p></div>
+            <div class="card ${dl.exposure==="high"?"alert":""}"><h3>Your institution's patience: ${esc(dl.label)}</h3><p>${esc(dl.text)}</p></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="level" style="--lvl:var(--p5)">
+        <div class="gutter"><div class="num">03</div><div class="lvl">Acting</div></div>
+        <div>
+          <div class="lvl-head"><h2>Your first intelligent move — and what will try to kill it</h2><p>Where to move first, the hallmarks your current design is missing, the traps it is exposed to, and the countermeasure your institution's way of dying calls for.</p></div>
+          <div class="grid g3">
+            <div class="card">
+              <h3>Move first in</h3>
+              <div class="big" style="color:${mp.c}">${esc(mp.n)}</div>
+              <p>${R.floorFails?`Not the outlier — the floor. Foundational scored ${pv.foundational}: participation, digital access and institutional trust cannot carry a move made anywhere else. Fix the floor, then return to ${esc(P[R.outlier].n)}.`:`The outlier. A small, structural, measurable change here — not a programme added on top — with the feedback mechanism written into it.`}</p>
+              <p class="note">Sequence: ${R.sequence.map((s,n)=>`<b>${n+1}. ${esc(P[s.k].n)}</b> <i>(${esc(s.why)})</i>`).join(" → ")}</p>
+            </div>
+            <div class="card ${R.hallmarksMissing.length?"alert":""}">
+              <h3>Hallmark check</h3>
+              ${R.noIntervention?`<p>You have no live intervention to test. Design the first one with all four hallmarks, in this order: <b>structural gap · systemic delay · spillover · feedback built in</b>.</p>`:
+                R.hallmarksMissing.length===0?`<p>All four hallmarks present. <span class="pill ok">intelligent by design</span></p><p class="note">Now check the traps — a well-designed move still dies in implementation.</p>`:
+                `<p>Your design is missing:</p><ul>${R.hallmarksMissing.map(k=>({gap:"<b>Targets the structural gap</b> — it currently addresses a symptom",delay:"<b>Accounts for systemic delay</b> — the timeline does not say when results can appear",spillover:"<b>Creates spillover</b> — it will hit an adjacent pillar's ceiling",feedback:"<b>Feedback built in at design stage</b> — evaluation is an afterthought"}[k])).map(t=>`<li>${t}</li>`).join("")}</ul><p class="note">${R.hallmarksMissing.includes("feedback")?"Start with feedback. An intervention without it is a bet, not a system.":"Fix the first missing hallmark before the launch date, not after."}</p>`}
+            </div>
+            <div class="card ${R.traps.length?"alert":""}">
+              <h3>Traps you are exposed to</h3>
+              ${R.traps.length?`<ul>${R.traps.map(t=>`<li><b>${esc(t.n)}</b> — ${esc(t.why)}</li>`).join("")}</ul>`:`<p>None of the five policy traps is active on what you have told us. <span class="pill ok">clear</span></p>`}
+              ${R.traps.length?`<p class="note">These are not peripheral risks. They are the most common reasons a well-diagnosed challenge still produces a poor intervention.</p>`:""}
+            </div>
+          </div>
+          <div class="grid g2" style="margin-top:12px">
+            <div class="card">
+              <h3>How your strategies die — and what holds this one</h3>
+              <div class="pairs"><div class="pair"><span class="f">${esc(death.n)}</span><span class="a">→</span><span class="c">${esc(death.counter)}</span></div></div>
+              <p class="note">This is a structural failure, not a motivational one. A named owner and a written protocol are the countermeasure; good intentions are not.</p>
+            </div>
+            <div class="card">
+              <h3>The countermeasure your failure mode calls for</h3>
+              <div class="pairs"><div class="pair"><span class="f">${esc(fail.n)}</span><span class="a">→</span><span class="c">${esc(fail.counter)}</span></div></div>
+              <p class="note">Build this into the first move itself. It is the part of the design that makes the second move possible.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="level" style="--lvl:var(--p2);border-bottom:0">
+        <div class="gutter"><div class="num">04</div><div class="lvl">Horizon</div></div>
+        <div>
+          <div class="lvl-head"><h2>Capacities to build, three years out</h2><p>Not predictions. The three capacities your answers point to — the ones that keep your city's options open and make the next move cheaper than this one.</p></div>
+          <div class="tiles">${R.horizon.map(h=>`<div class="tile"><span class="why">${esc(h.why)}</span><h4>${esc(h.h)}</h4><p>${esc(h.p)}</p></div>`).join("")}</div>
+        </div>
+      </section>
+    </div>
+
+    <aside class="spine">
+      <div><h2 class="spine-title">The Steward's Spine</h2><p class="spine-lede">The instrument does not think. This is what the map asks of you, specifically.</p></div>
+      <div class="sblock"><h4>Your postures</h4>
+        <p><b>Dominant — ${esc(pd.n)}.</b> ${esc(pd.d)}.</p>
+        <p><b>Underdeveloped — ${esc(pw.n)}.</b> ${esc(pw.d)}.</p>
+        <p style="margin-top:8px"><b>One shift for your next project:</b> ${esc(pw.shift)}.</p>
+      </div>
+      <hr>
+      <div class="sblock"><h4>Where you are thinnest</h4>
+        <p><b>${esc(dm.n)}.</b> The practice to commit to is <b>${esc(dm.practice)}</b> — ${esc(dm.why)}.</p>
+        <p style="margin-top:6px">Your lens adds a second: <b>${esc(lens.practice)}</b>.</p>
+      </div>
+      <hr>
+      <div class="sblock"><h4>Three equity questions</h4>
+        <p>Who designed the measures you scored with, and with which assumptions?</p>
+        <p>Whose neighbourhoods are absent from the data behind your ${esc(P[R.strength].n)} score?</p>
+        <p>What does the city average conceal about the people inside your ${esc(P[R.outlier].n)} score?</p>
+      </div>
+      <p class="closer">City intelligence is not city efficiency. An index is a claim about what matters, and measurement is a political and ethical act before it is a technical one.</p>
+    </aside>
+  </div>
+
+  <footer class="foot">
+    <div class="num">05</div>
+    <div>
+      <h2>Monday morning</h2>
+      <p>A draft commitment, written from your answers. Edit it until it is something you could begin this week — then print it and keep it on the desk.</p>
+      <textarea id="commit" aria-label="Your commitment">${esc(commit)}</textarea>
+      <p class="src">Built from the Map of City Intelligence · City Intelligence masterclasses for policymakers and researchers, Cities Are Alive, and the City Intelligence Index research · Dr. Fatime Barbara Hegyi · Future of Cities Academy</p>
+    </div>
+  </footer>`;
+
+  $("#quiz").hidden=true;
+  const r=$("#result"); r.innerHTML=html; r.hidden=false;
+  window.scrollTo({top:0});
+  $("#printBtn").addEventListener("click",()=>window.print());
+  $("#editBtn").addEventListener("click",()=>{ r.hidden=true; $("#quiz").hidden=false; $("#intro").hidden=true; $("#stepWrap").hidden=false; i=0; renderStep(); });
+  $("#resetBtn").addEventListener("click",()=>{ clear(); A={}; i=0; r.hidden=true; $("#quiz").hidden=false; $("#stepWrap").hidden=true; $("#intro").hidden=false; $("#resumeBtn").hidden=true; window.scrollTo({top:0}); });
+  wireDiagnosis(R);
+}
+
+/* ---------------- optional: ask Claude for a narrative ---------------- */
+async function wireDiagnosis(R){
+  let sample=null;
+  try{ sample = window.claude && window.claude.use ? await window.claude.use("sample") : null; }catch(e){ sample=null; }
+  const btn=$("#diagBtn"); if(!sample||!btn) return;
+  btn.hidden=false;
+  btn.addEventListener("click",async()=>{
+    btn.disabled=true; const box=$("#diag"), out=$("#diagText"), hint=$("#diagHint");
+    box.hidden=false; out.textContent="Thinking…"; hint.textContent="Uses your own Claude account; you may be asked to allow it.";
+    const pv=A.pillars, cv=A.conditions;
+    const prompt = `You are writing for Dr. Fatime Barbara Hegyi's Future of Cities work, in her voice: measured, precise, human, no hype, no exclamation marks, no consultant phrasing. Cities are living systems; intelligence is a system's capacity to act on what it knows; the City Intelligence Index is a diagnostic, not a ranking.
+
+Write ONE paragraph of at most 130 words, in the second person, diagnosing this practitioner's situation and naming their first intelligent move. Do not list; do not use headings; do not repeat the scores as numbers. End with one sentence about what the work will ask of them personally.
+
+Practitioner: ${A.role}. City: ${A.city||"unnamed"}. Challenge: "${A.challenge}".
+First question they ask: ${A.firstQuestion}. Flow they watch least: ${A.flowBlind}. Dominant failure mode: ${FAIL[A.failureMode].n}.
+Four conditions (1-5): circulation ${cv.circulation}, feedback ${cv.feedback}, alignment ${cv.alignment}, time horizon ${cv.horizon}. Weakest: ${C[R.weakCond].n}.
+Pillars (1-5): ${PILLARS.map(p=>p.n+" "+pv[p.k]).join(", ")}. Outlier: ${P[R.outlier].n}. Masked strength: ${P[R.strength].n}. Broken connection: ${R.connection?R.connection.name+" — "+R.connection.text:"none clear"}. Foundational floor failing: ${R.floorFails}.
+Institutional patience before calling failure: ${DELAY[A.patience].label}. Scaling pressure: ${A.scalePressure}. Hallmarks missing from current design: ${R.hallmarksMissing.join(", ")||"none"}. How strategies die: ${DEATH[A.strategyDeath].n}.
+Recommended first-move pillar: ${P[R.movePillar].n}. Sequence: ${R.sequence.map(s=>P[s.k].n).join(" → ")}.
+Dominant posture: ${POSTURE[A.postureDominant].n}. Underdeveloped: ${POSTURE[A.postureWeak].n}. Thinnest demand: ${DEMAND[A.demandThin].n}.`;
+    try{
+      const {text,truncated} = await sample(prompt,{modelTier:"default",onText:({text})=>{ out.textContent=text; }});
+      out.textContent=text; hint.textContent = truncated ? "Cut short." : "Written by Claude from your answers and the framework. Read it as a starting point, not a verdict.";
+    }catch(e){
+      out.textContent = e && e.text ? e.text : "";
+      hint.textContent = e && e.code==="not_granted" ? "Not enabled for this view." : e && e.code==="rate_limited" ? "Busy — try again in a moment." : e && e.code==="cancelled" ? "" : "Could not write the diagnosis just now.";
+      if(e && e.code==="not_granted") btn.hidden=true;
+    }finally{ btn.disabled=false; }
+  });
+}
+
+/* ---------------- boot ---------------- */
+if(load() && Object.keys(A).length){ $("#resumeBtn").hidden=false; }
+})();
+</script>
+
+</body></html>

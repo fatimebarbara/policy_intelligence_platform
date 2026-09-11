@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Policy Intelligence Platform</title>
+<meta name="description" content="Incorporating territorial complexity into policy decision-making — applied data science, priority setting, impact measurement and knowledge communities, by Dr Fatime Barbara Hegyi.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --paper:#EEF1F1;
+  --paper-2:#E3E8E8;
+  --ink:#14232B;
+  --slate:#3D4F57;
+  --mute:#7A8B92;
+  --rule:#C9D2D3;
+  --accent:#12707C;
+  --accent-ink:#0B4D55;
+  --accent-soft:#D6E7E8;
+  --warm:#C98A2E;
+  --warm-soft:#F1E3C8;
+  --display:"Familjen Grotesk",system-ui,"Helvetica Neue",Arial,sans-serif;
+  --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  color-scheme:light dark;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#0F1B20;
+    --paper-2:#152429;
+    --ink:#E8EEEF;
+    --slate:#B7C4C8;
+    --mute:#7F9096;
+    --rule:#2B3C42;
+    --accent:#5FB8C2;
+    --accent-ink:#8FD3DA;
+    --accent-soft:#173338;
+    --warm:#E0A94F;
+    --warm-soft:#3A2D14;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0F1B20;
+  --paper-2:#152429;
+  --ink:#E8EEEF;
+  --slate:#B7C4C8;
+  --mute:#7F9096;
+  --rule:#2B3C42;
+  --accent:#5FB8C2;
+  --accent-ink:#8FD3DA;
+  --accent-soft:#173338;
+  --warm:#E0A94F;
+  --warm-soft:#3A2D14;
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto} *{animation:none!important;transition:none!important}}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--serif);font-size:17px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:var(--accent-ink);text-decoration:none;border-bottom:1px solid var(--rule);transition:border-color .15s}
+a:hover{border-color:var(--accent)}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+img{max-width:100%}
+h1,h2,h3,h4{font-family:var(--display);letter-spacing:-.01em;line-height:1.1;margin:0;text-wrap:balance}
+p{margin:0}
+
+.wrap{max-width:1180px;margin-inline:auto;padding-inline:clamp(16px,4vw,48px)}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-ink)}
+.eyebrow .n{color:var(--mute)}
+
+/* header */
+header.top{
+  position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--paper) 88%,transparent);
+  backdrop-filter:blur(8px);border-bottom:1px solid var(--rule);
+}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:24px;height:60px}
+.brand{font-family:var(--display);font-weight:600;font-size:16px;letter-spacing:.01em;border:0;color:var(--ink);display:flex;align-items:center;gap:10px}
+.brand i{display:inline-block;width:10px;height:10px;background:var(--accent);border-radius:1px}
+nav.main{display:flex;gap:22px;font-family:var(--display);font-size:14px}
+nav.main a{border:0;color:var(--slate)}
+nav.main a:hover{color:var(--accent-ink)}
+@media (max-width:760px){nav.main{display:none}}
+
+/* hero */
+.hero{border-bottom:1px solid var(--rule);position:relative;overflow:hidden}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:40px;padding-block:64px 56px;align-items:end}
+.hero h1{font-size:clamp(38px,6vw,72px);font-weight:600;letter-spacing:-.03em}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero .sub{font-size:clamp(19px,2.2vw,23px);line-height:1.4;color:var(--slate);max-width:34ch;margin-top:22px;font-style:italic}
+.hero .cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px}
+.btn{font-family:var(--display);font-weight:600;font-size:14px;letter-spacing:.02em;padding:11px 18px;border:1px solid var(--ink);color:var(--ink);border-radius:2px;transition:background .15s,color .15s}
+.btn.primary{background:var(--ink);color:var(--paper)}
+.btn.primary:hover{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn:hover{border-color:var(--accent);color:var(--accent-ink)}
+.mosaic{position:relative;aspect-ratio:5/4;max-width:100%;border:1px solid var(--rule);background:var(--paper-2)}
+.mosaic canvas{width:100%;height:100%;display:block}
+.mosaic .cap{position:absolute;left:12px;bottom:10px;font-family:var(--mono);font-size:11px;color:var(--mute);letter-spacing:.04em}
+.legend{display:flex;gap:16px;margin-top:10px;font-family:var(--mono);font-size:11px;color:var(--mute);flex-wrap:wrap}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend b{width:10px;height:10px;display:inline-block;border-radius:1px}
+@media (max-width:860px){.hero .wrap{grid-template-columns:1fr;padding-block:44px 40px}.mosaic{aspect-ratio:16/9}}
+
+/* sections */
+section{padding-block:72px;border-bottom:1px solid var(--rule)}
+section .head{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:32px;margin-bottom:40px;align-items:start}
+section h2{font-size:clamp(28px,3.4vw,40px);font-weight:600;letter-spacing:-.02em;margin-top:8px}
+section .head p{color:var(--slate);font-size:18px;max-width:62ch}
+@media (max-width:860px){section{padding-block:52px}section .head{grid-template-columns:1fr;gap:12px}}
+
+/* four capabilities */
+.caps{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--ink);border-left:1px solid var(--rule)}
+.cap{padding:26px 22px 30px;border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);display:flex;flex-direction:column;gap:14px;min-height:280px}
+.cap .code{font-family:var(--mono);font-size:12px;color:var(--mute);letter-spacing:.08em}
+.cap h3{font-size:22px;font-weight:600}
+.cap p{color:var(--slate);font-size:15.5px;line-height:1.55}
+.cap .out{margin-top:auto;font-family:var(--mono);font-size:12px;color:var(--accent-ink);padding-top:12px;border-top:1px dashed var(--rule)}
+.cap svg{width:44px;height:44px;stroke:var(--accent);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.cap.impact svg{stroke:var(--warm)}
+@media (max-width:960px){.caps{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:520px){.caps{grid-template-columns:1fr}.cap{min-height:0}}
+
+/* approach */
+.approach{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:48px;align-items:start}
+.approach .lede{font-size:clamp(20px,2.3vw,26px);line-height:1.35;font-family:var(--display);font-weight:500;letter-spacing:-.01em;max-width:30ch}
+.approach .body{margin-top:22px;color:var(--slate);max-width:62ch;display:grid;gap:14px}
+.cycle{border:1px solid var(--rule);background:var(--paper-2);padding:22px}
+.cycle .eyebrow{margin-bottom:14px;display:block}
+.cycle ol{list-style:none;margin:0;padding:0;display:grid;gap:0}
+.cycle li{display:grid;grid-template-columns:34px 1fr;gap:12px;padding:12px 0;border-top:1px solid var(--rule);align-items:baseline}
+.cycle li:first-child{border-top:0;padding-top:0}
+.cycle li .k{font-family:var(--mono);font-size:12px;color:var(--accent-ink)}
+.cycle li b{font-family:var(--display);font-weight:600;display:block;font-size:16px}
+.cycle li span{color:var(--slate);font-size:14.5px;line-height:1.45}
+.cycle .loop{margin-top:14px;font-family:var(--mono);font-size:11.5px;color:var(--mute);letter-spacing:.04em}
+@media (max-width:860px){.approach{grid-template-columns:1fr;gap:28px}}
+
+/* knowledge assets */
+.assets{display:grid;gap:0;border-top:1px solid var(--ink)}
+.asset{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,6fr) minmax(0,3fr);gap:32px;padding:34px 0;border-bottom:1px solid var(--rule);align-items:start}
+.asset h3{font-size:24px;font-weight:600;letter-spacing:-.015em}
+.asset .q{font-family:var(--mono);font-size:12px;color:var(--mute);margin-top:10px;letter-spacing:.04em;line-height:1.5}
+.asset p{color:var(--slate);max-width:62ch}
+.asset p+p{margin-top:12px}
+.asset .meta{font-size:13.5px;color:var(--slate);display:grid;gap:10px}
+.asset .meta dt{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
+.asset .meta dd{margin:2px 0 0}
+.asset .meta dl{margin:0}
+.tag{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.06em;padding:3px 7px;border:1px solid var(--rule);border-radius:2px;margin:2px 4px 2px 0;color:var(--slate)}
+.tag.accent{border-color:var(--accent);color:var(--accent-ink);background:var(--accent-soft)}
+@media (max-width:960px){.asset{grid-template-columns:1fr;gap:16px}}
+
+/* evidence timeline */
+.lineage{display:grid;grid-template-columns:repeat(5,1fr);gap:0;border-top:1px solid var(--ink);border-left:1px solid var(--rule)}
+.era{padding:22px 18px 26px;border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);display:flex;flex-direction:column;gap:10px}
+.era .yr{font-family:var(--mono);font-size:12px;color:var(--accent-ink);letter-spacing:.08em}
+.era h3{font-size:17px;font-weight:600;line-height:1.25}
+.era p{font-size:14px;color:var(--slate);line-height:1.5}
+.era.now{background:var(--accent-soft)}
+.era.now .yr::after{content:" · in development";color:var(--mute)}
+@media (max-width:960px){.lineage{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:520px){.lineage{grid-template-columns:1fr}}
+
+/* tools */
+.tools{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--ink);border-left:1px solid var(--rule)}
+.tool{padding:26px 22px 28px;border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);display:flex;flex-direction:column;gap:12px;min-height:300px;color:inherit;transition:background .15s}
+.tool:hover{background:var(--paper-2)}
+.tool .kind{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent-ink)}
+.tool .kind span{color:var(--mute)}
+.tool h3{font-size:22px;font-weight:600}
+.tool p{color:var(--slate);font-size:15.5px;line-height:1.55}
+.tool .use{font-family:var(--mono);font-size:12px;color:var(--mute);line-height:1.5}
+.tool .go{margin-top:auto;padding-top:14px;border-top:1px dashed var(--rule);font-family:var(--display);font-size:14px;font-weight:600;color:var(--accent-ink)}
+a.tool{border-bottom:1px solid var(--rule)}
+.tool-seq{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;font-family:var(--mono);font-size:11.5px;color:var(--mute);letter-spacing:.03em}
+@media (max-width:860px){.tools{grid-template-columns:1fr}.tool{min-height:0}}
+
+/* learning */
+.courses{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--ink);border-left:1px solid var(--rule)}
+.course{padding:26px 22px 28px;border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);display:flex;flex-direction:column;gap:12px;min-height:250px}
+.course .lvl{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
+.course .lvl b{font-weight:500;color:var(--accent-ink)}
+.course h3{font-size:22px;font-weight:600}
+.course p{color:var(--slate);font-size:15.5px;line-height:1.55}
+.course .go{margin-top:auto;padding-top:14px;border-top:1px dashed var(--rule);font-family:var(--display);font-size:14px;font-weight:600}
+.course .go a{border:0}
+.course.soon{background:var(--paper-2)}
+.course.soon h3{color:var(--slate)}
+@media (max-width:860px){.courses{grid-template-columns:1fr}.course{min-height:0}}
+
+/* about + contact */
+.about{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:48px;align-items:start}
+.about .who h3{font-size:26px;font-weight:600;letter-spacing:-.015em}
+.about .who .role{font-family:var(--mono);font-size:12px;color:var(--mute);margin-top:8px;letter-spacing:.06em;line-height:1.6}
+.about .who ul{list-style:none;padding:0;margin:20px 0 0;display:grid;gap:8px;font-family:var(--display);font-size:14.5px}
+.about .who li a{border:0;color:var(--accent-ink)}
+.about .text{color:var(--slate);max-width:64ch;display:grid;gap:14px}
+.about .text strong{color:var(--ink);font-weight:600}
+@media (max-width:860px){.about{grid-template-columns:1fr;gap:24px}}
+
+.contact .wrap{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:48px;align-items:end}
+.contact h2{font-size:clamp(30px,4vw,48px)}
+.contact p{color:var(--slate);max-width:52ch;margin-top:16px;font-size:18px}
+.contact .box{border:1px solid var(--rule);padding:22px;background:var(--paper-2);display:grid;gap:14px}
+.contact .box .row{display:grid;grid-template-columns:96px 1fr;gap:12px;font-size:15px;align-items:baseline}
+.contact .box .row .k{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
+@media (max-width:860px){.contact .wrap{grid-template-columns:1fr;gap:28px}}
+
+footer{padding-block:28px 40px;font-family:var(--mono);font-size:11.5px;color:var(--mute);letter-spacing:.03em}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+footer a{border:0;color:var(--mute)}
+footer a:hover{color:var(--accent-ink)}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top"><i></i>Policy Intelligence Platform</a>
+    <nav class="main" aria-label="Sections">
+      <a href="#approach">Approach</a>
+      <a href="#capabilities">Capabilities</a>
+      <a href="#assets">Knowledge assets</a>
+      <a href="#evidence">Evidence base</a>
+      <a href="#tools">Tools</a>
+      <a href="#learning">Learning</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero" id="top">
+  <div class="wrap">
+    <div>
+      <span class="eyebrow">Applied data science for territorial policy</span>
+      <h1 style="margin-top:18px">Policy decisions that <em>know where they land.</em></h1>
+      <p class="sub">Incorporating territorial complexity into policy decision-making — from priority setting to the measurement of impact.</p>
+      <div class="cta">
+        <a class="btn primary" href="#assets">See the knowledge assets</a>
+        <a class="btn" href="#contact">Start a conversation</a>
+      </div>
+    </div>
+    <div>
+      <div class="mosaic" aria-label="Abstract mosaic of territorial units shaded by estimated potential">
+        <canvas id="mosaic" width="800" height="640" role="img"></canvas>
+        <div class="cap">territorial units · shaded by relative potential · illustrative</div>
+      </div>
+      <div class="legend">
+        <span><b style="background:var(--accent)"></b> high potential</span>
+        <span><b style="background:var(--warm)"></b> policy-supported</span>
+        <span><b style="background:var(--rule)"></b> baseline</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="approach">
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow"><span class="n">01 /</span> Approach</span>
+      <h2>From reactive policy to a cyclical, evidence-fed process.</h2>
+    </div>
+    <div class="approach">
+      <div>
+        <p class="lede">Policy problems are compound. Their solutions have to be adjusted to the territory they are meant for — not borrowed from elsewhere and hoped into place.</p>
+        <div class="body">
+          <p>The increasing complexity of the policymaking context calls for compound policies built on extended analytical capacity: large datasets synthesised through data-science techniques, translated into scenarios a decision-maker can actually use. The platform provides such scenarios for policy priority setting, implementation and monitoring, generating foresight for better-adjusted decisions.</p>
+          <p>The aim is to help policymaking become proactive rather than reactive: identifying the economic, social or environmental opportunities and needs of a given territory, and then measuring whether the decisions taken in response are having the intended effect. Evidence feeds the next cycle. Awareness becomes agency.</p>
+          <p>Every method here grew out of more than a decade of work on research and innovation strategies, innovation ecosystems and city intelligence — inside the European Commission's Joint Research Centre, and since then in independent research on how cities and regions build the structural capacity to learn, adapt and improve.</p>
+        </div>
+      </div>
+      <aside class="cycle" aria-label="The policy intelligence cycle">
+        <span class="eyebrow">The cycle</span>
+        <ol>
+          <li><span class="k">T0</span><div><b>Diagnose the territory</b><span>What capabilities, products and knowledge does this place actually hold — measured, not assumed.</span></div></li>
+          <li><span class="k">T1</span><div><b>Set priorities</b><span>Identify high-potential domains and their closest sustainable alternatives; choose where scarce policy effort goes.</span></div></li>
+          <li><span class="k">T2</span><div><b>Implement &amp; monitor</b><span>Track the sectors, products or districts that policy instruments support, at regular intervals.</span></div></li>
+          <li><span class="k">T3</span><div><b>Measure impact</b><span>Compare expected with actual results; confirm, adjust or retire priorities.</span></div></li>
+        </ol>
+        <div class="loop">T3 → T0 · the loop is the method</div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<section id="capabilities">
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow"><span class="n">02 /</span> Capabilities</span>
+      <h2>Four things the platform does.</h2>
+    </div>
+    <div class="caps">
+      <article class="cap">
+        <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="10" cy="36" r="3"/><circle cx="20" cy="22" r="3"/><circle cx="31" cy="28" r="3"/><circle cx="40" cy="10" r="3"/><path d="M12.5 33.5l5-9M22.8 23.6l5.5 2.9M33.4 25.7l4.6-12.5"/></svg>
+        <div class="code">CAP 01</div>
+        <h3>Applied data science</h3>
+        <p>Trade, patent, research-participation and geospatial datasets synthesised into territory-level evidence — at the resolution decisions are taken (city, NUTS2 region, state).</p>
+        <div class="out">output · territorial evidence base</div>
+      </article>
+      <article class="cap">
+        <svg viewBox="0 0 48 48" aria-hidden="true"><rect x="8" y="8" width="32" height="32"/><path d="M8 24h32M24 8v32"/><rect x="26" y="10" width="12" height="12" fill="currentColor" opacity=".18"/></svg>
+        <div class="code">CAP 02</div>
+        <h3>Policy priority setting</h3>
+        <p>Data-driven identification of specialisation domains and high-potential product groups, with the green alternatives that sit closest to what a territory already knows how to do.</p>
+        <div class="out">output · ranked priority domains</div>
+      </article>
+      <article class="cap impact">
+        <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M6 40h36"/><path d="M10 40V26M18 40V18M26 40V30M34 40V12M42 40V22"/><path d="M10 24l8-8 8 12 8-18 8 10" stroke-dasharray="2 3"/></svg>
+        <div class="code">CAP 03</div>
+        <h3>Measuring the impact of policy decisions</h3>
+        <p>Regular monitoring of the sectors, sub-sectors or products a policy instrument supports, so that expected and actual results can be compared — and priorities confirmed or corrected.</p>
+        <div class="out">output · impact &amp; effectiveness assessment</div>
+      </article>
+      <article class="cap">
+        <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="5"/><circle cx="9" cy="14" r="3"/><circle cx="39" cy="12" r="3"/><circle cx="11" cy="38" r="3"/><circle cx="38" cy="36" r="3"/><path d="M12 16l8 5M36 14l-8 6M13 36l7-8M35 34l-7-6"/></svg>
+        <div class="code">CAP 04</div>
+        <h3>Knowledge space &amp; community</h3>
+        <p>Comparable indicators, shared vocabularies and learning formats — masterclasses, executive workshops, peer exchange — so that evidence becomes institutional capacity, not a one-off report.</p>
+        <div class="out">output · learning infrastructure</div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="assets">
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow"><span class="n">03 /</span> Knowledge assets</span>
+      <h2>Three methodologies, each answering a question a policymaker actually asks.</h2>
+    </div>
+    <div class="assets">
+
+      <article class="asset">
+        <div>
+          <h3>Identifying high-potential sustainable market dynamics</h3>
+          <div class="q">Q · Where should this territory place its bets — and what is the greenest bet within reach?</div>
+        </div>
+        <div>
+          <p>Based on the synthesis of large trade and capability datasets, the method identifies groups of high- and low-potential products linked to policy priority areas and proposes forecasts for those domains. It reveals the intangible capabilities embedded in what a territory already produces and trades, and uses their interconnections to map evidence-based pathways for structural change towards higher value-added activity.</p>
+          <p>To support the Sustainable Development Goals, the method also identifies the closest green alternatives — products a territory could plausibly move into, given what it already knows how to make. The result feeds strategic decisions and policy design, and creates a cyclical learning process between expected and actual results.</p>
+        </div>
+        <div class="meta">
+          <dl><dt>Methods</dt><dd><span class="tag">economic complexity</span><span class="tag">product space</span><span class="tag">relatedness</span><span class="tag">forecasting</span></dd></dl>
+          <dl><dt>Applied in</dt><dd>priority setting for regional research and innovation strategies; identification of capabilities and structural-change pathways from trade and product data</dd></dl>
+          <dl><dt>Granularity</dt><dd>national · NUTS2 / state · product category</dd></dl>
+        </div>
+      </article>
+
+      <article class="asset">
+        <div>
+          <h3>Monitoring the impact of policy decisions</h3>
+          <div class="q">Q · Did the instrument we funded change anything — and should we keep funding it?</div>
+        </div>
+        <div>
+          <p>The method monitors the change of a given sector, sub-sector or group of products supported by policy instruments, so that the impact and effectiveness of the decision can be assessed. By tracking the evolution of specific markets or products at regular intervals, governments see the challenges and opportunities emerging from future industry trajectories before they arrive.</p>
+          <p>Feeding this back into the territory's own policy process lets decision-makers confirm the validity and relevance of previously selected priorities — or revise them — and respond to future challenges proactively rather than after the fact. It builds on a decade of work designing monitoring and evaluation systems for research and innovation strategies across Europe.</p>
+        </div>
+        <div class="meta">
+          <dl><dt>Methods</dt><dd><span class="tag accent">monitoring &amp; evaluation</span><span class="tag">indicator systems</span><span class="tag">counterfactual comparison</span><span class="tag">time series</span></dd></dl>
+          <dl><dt>Applied in</dt><dd>monitoring and evaluation frameworks for research and innovation strategies (JRC, 2020–2021); thematic interregional partnership evaluation</dd></dl>
+          <dl><dt>Cadence</dt><dd>reference-year updates · rolling dashboards</dd></dl>
+        </div>
+      </article>
+
+      <article class="asset">
+        <div>
+          <h3>Uncovering geographies of innovation</h3>
+          <div class="q">Q · Where is innovation actually concentrating in our city — and which concentrations will succeed?</div>
+        </div>
+        <div>
+          <p>Innovation districts are emerging worldwide, and they need targeted, integrative policy to turn their positive externalities into structural change for the whole place. The method identifies urban areas with a high concentration of innovation activity — including activity linked to sustainability — from large-scale geospatial data, and measures the differentiators between areas that flourish and areas that stall.</p>
+          <p>The aim is to inform policy engineering: which districts to support, with which instruments, and how to judge whether the support is working. The methodology was developed with network scientists and published by the European Commission's Joint Research Centre, alongside case studies from Amsterdam, Barcelona, Melbourne and Stockholm.</p>
+        </div>
+        <div class="meta">
+          <dl><dt>Methods</dt><dd><span class="tag">geospatial data</span><span class="tag">machine learning</span><span class="tag">network science</span><span class="tag">case studies</span></dd></dl>
+          <dl><dt>Published as</dt><dd><a href="https://publications.jrc.ec.europa.eu/repository/handle/JRC125559">Measuring the Impact of Urban Innovation Districts</a> (JRC, 2021) · <a href="https://ideas.repec.org/p/ipt/iptwpa/jrc125482.html">Exploring the Concept of Geographies of Innovation</a> (JRC, 2021)</dd></dl>
+          <dl><dt>Granularity</dt><dd>city · district · block</dd></dl>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<section id="evidence">
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow"><span class="n">04 /</span> Evidence base</span>
+      <p>The platform is not a product built from scratch. Each capability traces to a specific body of research, most of it produced inside the European Commission's Joint Research Centre and continued independently since.</p>
+    </div>
+    <div class="lineage">
+      <article class="era">
+        <div class="yr">2014 – 2017</div>
+        <h3>Research and innovation strategy foundations</h3>
+        <p>Regional benchmarking, the role of universities, innovation in rural areas, peer-review workshops, the Stairway to Excellence country work and the thematic platform on industrial modernisation.</p>
+      </article>
+      <article class="era">
+        <div class="yr">2018 – 2021</div>
+        <h3>Monitoring, evaluation &amp; interregional learning</h3>
+        <p>Evaluation frameworks for thematic interregional partnerships, monitoring and evaluation experience across Europe, leadership in interregional collaboration, and the policy experience of research and innovation strategies seen from national and regional authorities.</p>
+      </article>
+      <article class="era">
+        <div class="yr">2021</div>
+        <h3>Geographies of innovation</h3>
+        <p>A quantitative methodology to identify urban innovation districts and measure their success, plus thirteen case studies across four cities on how park, hub, district and ecosystem models differ.</p>
+      </article>
+      <article class="era">
+        <div class="yr">ongoing</div>
+        <h3>Capabilities &amp; structural change</h3>
+        <p>Economic-complexity methods that read the intangible capabilities embedded in what a territory produces and trades, and identify its highest- and lowest-potential product categories — evidence-based pathways towards higher value-added activity.</p>
+      </article>
+      <article class="era now">
+        <div class="yr">2025 →</div>
+        <h3>City intelligence</h3>
+        <p><em>The Future of Cities</em> (2025) and the City Intelligence Index: a six-pillar comparative framework of urban structural performance across European NUTS2 city-regions, currently in data population and validation.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="tools">
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow"><span class="n">05 /</span> Tools</span>
+      <div>
+        <h2>Three working instruments, open to use.</h2>
+        <p style="margin-top:14px">Built from the City Intelligence masterclasses and the index research. Read the map, take the survey, then work the sheet on one city and one challenge you are actually carrying. All three print to PDF; nothing you type leaves your browser.</p>
+      </div>
+    </div>
+    <div class="tools">
+      <a class="tool" href="map.html">
+        <div class="kind">Reference <span>· read · 15 min</span></div>
+        <h3>The Map of City Intelligence</h3>
+        <p>Four levels of a city's capacity to act on what it knows — seeing, measuring, acting, horizon — with the six CII pillars, the four conditions of intelligence, the five failure modes and the four ways strategies die.</p>
+        <div class="use">Use it to · frame a diagnosis · brief a team · teach the model</div>
+        <div class="go">Open the map →</div>
+      </a>
+      <a class="tool" href="survey.html">
+        <div class="kind">Self-assessment <span>· 13 questions · 8 min</span></div>
+        <h3>Your City Intelligence Map</h3>
+        <p>Score the city you work in and how your institution actually behaves. The result is a personalised map: where your system breaks the chain between evidence and action, which pillar to move first, and the traps your design is exposed to.</p>
+        <div class="use">Use it to · locate the outlier · choose the first move · start a conversation</div>
+        <div class="go">Take the survey →</div>
+      </a>
+      <a class="tool" href="worksheet.html">
+        <div class="kind">Workshop companion <span>· print · one per participant</span></div>
+        <h3>City Intelligence Worksheet</h3>
+        <p>The map applied by hand to one city and one challenge: name the pattern, score the pillars, design the first intelligent move with its feedback mechanism, and write the Monday-morning commitment.</p>
+        <div class="use">Use it in · executive workshops · masterclass sessions · team away days</div>
+        <div class="go">Open the worksheet →</div>
+      </a>
+    </div>
+    <div class="tool-seq"><span>sequence ·</span><span>map (understand)</span><span>→</span><span>survey (locate)</span><span>→</span><span>worksheet (commit)</span></div>
+  </div>
+</section>
+
+<section id="learning">
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow"><span class="n">06 /</span> Learning</span>
+      <h2>Evidence becomes capacity only when people learn to use it.</h2>
+    </div>
+    <div class="courses">
+      <article class="course">
+        <div class="lvl"><b>Free introduction</b> · open to all</div>
+        <h3>Cities Are Alive</h3>
+        <p>The starting point: cities as living systems, shaped by what their leaders choose to measure. A short, open course that sets out the thinking behind everything else on this page.</p>
+        <div class="go"><a href="https://fatimebarbara.vision/learning-hub">Start with the free course →</a></div>
+      </article>
+      <article class="course">
+        <div class="lvl"><b>Mastercourse</b> · 12 chapters · certification</div>
+        <h3>City Intelligence for Policymakers &amp; Researchers</h3>
+        <p>From why cities fail to how to diagnose one, design an intervention, build a strategy and govern it — including the ethics of data and power. Individual and five-seat institutional access.</p>
+        <div class="go"><a href="https://fatimebarbara.vision/learning-hub">Explore the mastercourse →</a></div>
+      </article>
+      <article class="course soon">
+        <div class="lvl"><b>In development</b></div>
+        <h3>More to come</h3>
+        <p>Further programmes are in preparation, including city intelligence for corporate leaders and for university leadership, and a licensable university module. Follow the Learning Hub for release dates.</p>
+        <div class="go"><a href="https://fatimebarbara.vision/learning-hub">Future of Cities Learning Hub →</a></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow"><span class="n">07 /</span> About</span>
+      <h2>Who is behind it.</h2>
+    </div>
+    <div class="about">
+      <div class="who">
+        <h3>Dr Fatime Barbara Hegyi</h3>
+        <div class="role">urban strategy · city science · policy evaluation<br>Brussels</div>
+        <ul>
+          <li><a href="https://www.linkedin.com/in/fatimebarbara/">LinkedIn · fatimebarbara</a></li>
+          <li><a href="https://fatimebarbara.vision">fatimebarbara.vision</a></li>
+          <li><a href="https://fatimebarbara.vision/learning-hub">Future of Cities Learning Hub</a></li>
+          <li><a href="https://www.instagram.com/fatimebarbara_art">Instagram · fatimebarbara_art</a></li>
+        </ul>
+      </div>
+      <div class="text">
+        <p><strong>Researcher, keynote speaker and educator</strong> working at the intersection of urban strategy, city intelligence and AI-enabled governance. For more than a decade at the European Commission's Joint Research Centre she worked on the EU's place-based research and innovation strategies, including their monitoring and evaluation, interregional collaboration and the geographies of innovation inside cities.</p>
+        <p>Her book <em>The Future of Cities</em> (2025) argues that cities are living systems, shaped by what their leaders choose to measure. That argument now takes applied form in the City Intelligence Index and the Future of Cities Learning Hub, where policymakers, researchers and city leaders learn to diagnose a city's structural capacity and act on it.</p>
+        <p>She holds a PhD on market-oriented city development and is also a published literary author and a painter working in watercolour — which is to say that she reads a city with both a spreadsheet and a sketchbook, and is convinced the two belong together.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="wrap">
+    <div>
+      <span class="eyebrow"><span class="n">08 /</span> Contact</span>
+      <h2 style="margin-top:12px">Diagnose what you have. Find what is missing. Decide what to build.</h2>
+      <p>The platform works with governments, agencies and city administrations on territorial diagnosis, priority setting, monitoring design and the training that turns evidence into institutional habit.</p>
+    </div>
+    <div class="box">
+      <div class="row"><span class="k">LinkedIn</span><a href="https://www.linkedin.com/in/fatimebarbara/">linkedin.com/in/fatimebarbara</a></div>
+      <div class="row"><span class="k">Speaking</span><a href="https://fatimebarbara.vision/en/contact/">fatimebarbara.vision/contact</a></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>© <span id="yr">2026</span> Policy Intelligence Platform · Dr Fatime Barbara Hegyi</span>
+    <span>Territorial mosaic drawn procedurally — no stock imagery. <a href="#top">Back to top ↑</a></span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  // Procedural territorial mosaic: a grid of irregular cells, shaded by a smooth
+  // "potential" field, with a few policy-supported cells highlighted in warm.
+  var cv = document.getElementById('mosaic'), ctx = cv.getContext('2d');
+  var W = cv.width, H = cv.height;
+
+  function css(name){ return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+  function hex2rgb(h){ h=h.replace('#',''); if(h.length===3){h=h.split('').map(function(c){return c+c}).join('')} var n=parseInt(h,16); return [n>>16&255,n>>8&255,n&255]; }
+  function mix(a,b,t){ return [Math.round(a[0]+(b[0]-a[0])*t),Math.round(a[1]+(b[1]-a[1])*t),Math.round(a[2]+(b[2]-a[2])*t)]; }
+  function rgb(c){ return 'rgb('+c[0]+','+c[1]+','+c[2]+')'; }
+
+  // deterministic pseudo-random so the picture is stable between loads
+  var seed = 20260911;
+  function rnd(){ seed = (seed*1664525 + 1013904223) % 4294967296; return seed/4294967296; }
+
+  function draw(){
+    var paper = hex2rgb(css('--paper-2')), rule = hex2rgb(css('--rule')),
+        accent = hex2rgb(css('--accent')), warm = hex2rgb(css('--warm')), ink = hex2rgb(css('--ink'));
+    seed = 20260911;
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle = rgb(paper); ctx.fillRect(0,0,W,H);
+
+    var cols = 20, rows = 16, cw = W/cols, ch = H/rows;
+    // jittered lattice → quads
+    var pts = [];
+    for(var r=0;r<=rows;r++){ pts[r]=[]; for(var c=0;c<=cols;c++){
+      var jx = (c===0||c===cols)?0:(rnd()-.5)*cw*.7, jy=(r===0||r===rows)?0:(rnd()-.5)*ch*.7;
+      pts[r][c]=[c*cw+jx, r*ch+jy];
+    }}
+    // smooth potential field: two peaks
+    function field(x,y){
+      var p1 = Math.exp(-(((x-W*.62)*(x-W*.62))/(2*130*130) + ((y-H*.38)*(y-H*.38))/(2*110*110)));
+      var p2 = Math.exp(-(((x-W*.25)*(x-W*.25))/(2*90*90) + ((y-H*.72)*(y-H*.72))/(2*80*80)))*.75;
+      return Math.min(1, p1+p2);
+    }
+    var supported = {};
+    for(var i=0;i<9;i++){ supported[Math.floor(rnd()*rows)+'-'+Math.floor(rnd()*cols)] = true; }
+
+    for(var r=0;r<rows;r++) for(var c=0;c<cols;c++){
+      var a=pts[r][c], b=pts[r][c+1], d=pts[r+1][c+1], e=pts[r+1][c];
+      var cx=(a[0]+b[0]+d[0]+e[0])/4, cy=(a[1]+b[1]+d[1]+e[1])/4;
+      var v = field(cx,cy) * (0.75 + rnd()*0.35);
+      var col = v<0.18 ? mix(paper, rule, v/0.18*0.9) : mix(mix(paper,rule,.9), accent, (v-0.18)/0.82);
+      if(supported[r+'-'+c]) col = mix(warm, paper, 0.15);
+      ctx.beginPath(); ctx.moveTo(a[0],a[1]); ctx.lineTo(b[0],b[1]); ctx.lineTo(d[0],d[1]); ctx.lineTo(e[0],e[1]); ctx.closePath();
+      ctx.fillStyle = rgb(col); ctx.fill();
+      ctx.strokeStyle = rgb(paper); ctx.lineWidth = 1.5; ctx.stroke();
+    }
+    // a few "flows" between supported cells and the high-potential core, as thin lines
+    ctx.strokeStyle = rgb(mix(ink,paper,.55)); ctx.lineWidth = 1; ctx.setLineDash([3,4]);
+    var core=[W*.62,H*.38];
+    Object.keys(supported).forEach(function(k){
+      var rc=k.split('-'), r=+rc[0], c=+rc[1];
+      var a=pts[r][c], d=pts[r+1][c+1]; var cx=(a[0]+d[0])/2, cy=(a[1]+d[1])/2;
+      ctx.beginPath(); ctx.moveTo(cx,cy); ctx.quadraticCurveTo((cx+core[0])/2, Math.min(cy,core[1])-40, core[0],core[1]); ctx.stroke();
+    });
+    ctx.setLineDash([]);
+    ctx.fillStyle = rgb(ink); ctx.beginPath(); ctx.arc(core[0],core[1],4,0,Math.PI*2); ctx.fill();
+  }
+  draw();
+  if(window.matchMedia){ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', draw); }
+})();
+</script>
+</body>
+</html>

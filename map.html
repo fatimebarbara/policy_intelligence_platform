@@ -1,0 +1,574 @@
+<!doctype html><html lang="en"><head><title>The Map of City Intelligence</title><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<a href="index.html" style="position:fixed;top:10px;left:12px;z-index:9;font:600 12px/1 system-ui,sans-serif;letter-spacing:.04em;color:#0E6E78;background:rgba(247,249,250,.92);border:1px solid #C3CDD4;padding:7px 10px;border-radius:2px;text-decoration:none">← Policy Intelligence Platform</a>
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+
+<style>
+:root{
+  --paper:#E7EBEE;
+  --sheet:#F7F9FA;
+  --card:#FFFFFF;
+  --ink:#0D1A22;
+  --ink-2:#33454F;
+  --ink-3:#6B7C86;
+  --rule:#C3CDD4;
+  --rule-soft:#DDE4E8;
+  --accent:#0E6E78;
+  --accent-soft:#DCEBEC;
+  --panel:#0D1A22;
+  --panel-ink:#DEE7EB;
+  --panel-ink-2:#93A6AF;
+  --panel-rule:#283B45;
+  --p1:#1D4ED8;
+  --p2:#6D28D9;
+  --p3:#15803D;
+  --p4:#A16207;
+  --p5:#C2410C;
+  --p6:#BE185D;
+  --warn:#8A2D0B;
+  --warn-bg:#FBEAE2;
+  --shadow:0 1px 2px rgba(13,26,34,.06), 0 8px 24px -18px rgba(13,26,34,.45);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0A1014;
+    --sheet:#111A20;
+    --card:#162128;
+    --ink:#E4ECF0;
+    --ink-2:#B4C4CD;
+    --ink-3:#8194A0;
+    --rule:#2C3D47;
+    --rule-soft:#22313A;
+    --accent:#4FBFC9;
+    --accent-soft:#12333A;
+    --panel:#050B0E;
+    --panel-ink:#DEE7EB;
+    --panel-ink-2:#8FA3AD;
+    --panel-rule:#22333C;
+    --p1:#7CA5FF;
+    --p2:#B58BFF;
+    --p3:#5FCB86;
+    --p4:#DDB44A;
+    --p5:#FF9057;
+    --p6:#FF7BAE;
+    --warn:#FFAE85;
+    --warn-bg:#2A1710;
+    --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 28px -20px rgba(0,0,0,.9);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0A1014;
+  --sheet:#111A20;
+  --card:#162128;
+  --ink:#E4ECF0;
+  --ink-2:#B4C4CD;
+  --ink-3:#8194A0;
+  --rule:#2C3D47;
+  --rule-soft:#22313A;
+  --accent:#4FBFC9;
+  --accent-soft:#12333A;
+  --panel:#050B0E;
+  --panel-ink:#DEE7EB;
+  --panel-ink-2:#8FA3AD;
+  --panel-rule:#22333C;
+  --p1:#7CA5FF;
+  --p2:#B58BFF;
+  --p3:#5FCB86;
+  --p4:#DDB44A;
+  --p5:#FF9057;
+  --p6:#FF7BAE;
+  --warn:#FFAE85;
+  --warn-bg:#2A1710;
+  --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 28px -20px rgba(0,0,0,.9);
+}
+
+*{box-sizing:border-box}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:"IBM Plex Sans","Helvetica Neue",Arial,sans-serif;
+  font-size:14px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{padding:28px 20px 56px;display:flex;justify-content:center}
+.sheet{
+  width:100%;max-width:1260px;background:var(--sheet);
+  border:1px solid var(--rule);box-shadow:var(--shadow);
+  padding:34px 34px 0;
+}
+
+/* ---------- masthead ---------- */
+.mast{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:28px;align-items:end;padding-bottom:20px;border-bottom:2px solid var(--ink)}
+h1{
+  font-family:Archivo,"Helvetica Neue",Arial,sans-serif;
+  font-weight:800;font-size:clamp(30px,4.4vw,54px);line-height:.98;
+  letter-spacing:-.02em;margin:0 0 12px;text-wrap:balance;text-transform:uppercase;
+}
+h1 em{font-style:normal;color:var(--accent)}
+.deck{max-width:62ch;color:var(--ink-2);font-size:15px;line-height:1.55;margin:0}
+.deck b{color:var(--ink);font-weight:600}
+.byline{margin-top:14px;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+.byline strong{color:var(--accent);font-weight:600}
+.key{display:flex;flex-direction:column;gap:6px;padding-bottom:4px}
+.key-t{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+.key-row{display:flex;gap:14px;flex-wrap:wrap}
+.key-item{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--ink-2);white-space:nowrap}
+.dot{width:9px;height:9px;border-radius:50%;flex:none}
+
+/* ---------- body grid: levels + spine ---------- */
+.atlas{display:grid;grid-template-columns:minmax(0,1fr) 272px;gap:0 26px;padding-top:6px}
+.levels{display:flex;flex-direction:column}
+
+.level{display:grid;grid-template-columns:72px minmax(0,1fr);gap:0 20px;padding:26px 0;border-bottom:1px solid var(--rule)}
+.gutter{position:relative}
+.gutter .num{
+  font-family:Archivo,sans-serif;font-weight:800;font-size:50px;line-height:.8;
+  letter-spacing:-.04em;color:transparent;-webkit-text-stroke:1.5px var(--lvl,var(--accent));
+}
+.gutter .lvl{
+  position:absolute;top:64px;left:6px;transform-origin:left top;transform:rotate(90deg);
+  font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--lvl,var(--accent));white-space:nowrap;font-weight:600;
+}
+.lvl-head{margin-bottom:16px}
+.lvl-head h2{
+  font-family:Archivo,sans-serif;font-weight:700;font-size:22px;line-height:1.1;margin:0 0 5px;
+  letter-spacing:-.01em;
+}
+.lvl-head p{margin:0;color:var(--ink-2);font-size:13.5px;max-width:78ch}
+
+/* ---------- cards ---------- */
+.grid{display:grid;gap:12px}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g6{grid-template-columns:repeat(6,minmax(0,1fr))}
+.card{background:var(--card);border:1px solid var(--rule-soft);padding:13px 14px 15px;display:flex;flex-direction:column;gap:8px}
+.card h3{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10.5px;font-weight:600;
+  letter-spacing:.13em;text-transform:uppercase;margin:0;color:var(--lvl,var(--accent));
+}
+.card ul{margin:0;padding-left:15px;display:flex;flex-direction:column;gap:5px}
+.card li{font-size:12.5px;line-height:1.42;color:var(--ink-2)}
+.card li b,.card p b{color:var(--ink);font-weight:600}
+.card p{margin:0;font-size:12.5px;line-height:1.45;color:var(--ink-2)}
+.card .note{font-size:11.5px;color:var(--ink-3);font-style:italic;border-top:1px solid var(--rule-soft);padding-top:8px;margin-top:auto}
+
+/* banner strips */
+.strip{border:1px solid var(--rule);background:var(--accent-soft);padding:12px 16px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 20px;align-items:baseline;margin-bottom:12px}
+.strip h3{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;margin:0;color:var(--accent);font-weight:600;white-space:nowrap}
+.strip p{margin:0;font-size:12.5px;color:var(--ink-2)}
+.strip p b{color:var(--ink);font-weight:600}
+
+.alert{border:1px solid var(--rule-soft);background:var(--warn-bg);padding:13px 14px 15px}
+.alert h3{color:var(--warn)}
+
+/* pillar columns */
+.pillar{background:var(--card);border:1px solid var(--rule-soft);border-top:4px solid var(--pc);padding:12px 12px 14px;display:flex;flex-direction:column;gap:7px}
+.pillar .pn{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.12em;color:var(--pc);font-weight:600}
+.pillar h4{font-family:Archivo,sans-serif;font-size:14px;font-weight:700;margin:0;line-height:1.15;letter-spacing:-.01em}
+.pillar p{margin:0;font-size:11.8px;line-height:1.4;color:var(--ink-2)}
+.pillar .tell{margin-top:auto;padding-top:8px;border-top:1px solid var(--rule-soft);font-size:11.2px;color:var(--ink-3);line-height:1.4}
+
+/* numbered step lists */
+.steps{counter-reset:s;display:grid;gap:7px;margin:0;padding:0;list-style:none}
+.steps li{counter-increment:s;position:relative;padding-left:26px;font-size:12.5px;line-height:1.4;color:var(--ink-2)}
+.steps li::before{
+  content:counter(s,decimal-leading-zero);position:absolute;left:0;top:1px;
+  font-family:"IBM Plex Mono",monospace;font-size:10.5px;
+  color:var(--lvl,var(--accent));font-weight:600;font-variant-numeric:tabular-nums;
+}
+.steps li b{color:var(--ink);font-weight:600}
+
+/* paired failure / countermeasure */
+.pairs{display:grid;gap:0;border-top:1px solid var(--rule-soft)}
+.pair{display:grid;grid-template-columns:minmax(0,1fr) 14px minmax(0,1.1fr);gap:10px;align-items:baseline;padding:7px 0;border-bottom:1px solid var(--rule-soft);font-size:12.3px}
+.pair .f{color:var(--warn);font-weight:600}
+.pair .a{color:var(--ink-3);font-family:"IBM Plex Mono",monospace;font-size:11px}
+.pair .c{color:var(--ink-2)}
+
+/* horizon tiles */
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.tile{border:1px dashed var(--rule);background:transparent;padding:11px 12px}
+.tile h4{font-family:Archivo,sans-serif;font-size:13px;font-weight:700;margin:0 0 4px;line-height:1.15}
+.tile p{margin:0;font-size:11.6px;line-height:1.4;color:var(--ink-3)}
+
+/* ---------- spine ---------- */
+.spine{background:var(--panel);color:var(--panel-ink);padding:24px 20px 26px;display:flex;flex-direction:column;gap:18px;position:relative;align-self:stretch}
+.spine-title{font-family:Archivo,sans-serif;font-weight:800;font-size:19px;line-height:1.05;text-transform:uppercase;letter-spacing:-.01em;margin:0;color:#fff}
+.spine-lede{margin:0;font-size:12px;line-height:1.5;color:var(--panel-ink-2)}
+.sblock h4{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;margin:0 0 8px;color:var(--accent);font-weight:600}
+.sblock ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:7px}
+.sblock li{font-size:12px;line-height:1.42;color:var(--panel-ink-2);padding-left:12px;position:relative}
+.sblock li::before{content:"";position:absolute;left:0;top:7px;width:5px;height:5px;background:var(--accent)}
+.sblock li b{color:var(--panel-ink);font-weight:600}
+.spine hr{border:0;border-top:1px solid var(--panel-rule);margin:0}
+.spine .closer{font-size:12px;line-height:1.5;color:var(--panel-ink);border-left:2px solid var(--accent);padding-left:11px;margin:0}
+
+/* ---------- footer ---------- */
+.foot{display:grid;grid-template-columns:64px minmax(0,1fr);gap:20px;padding:24px 0 30px;border-top:2px solid var(--ink)}
+.foot .num{font-family:Archivo,sans-serif;font-weight:800;font-size:50px;line-height:.8;color:transparent;-webkit-text-stroke:1.5px var(--accent)}
+.foot h2{font-family:Archivo,sans-serif;font-weight:700;font-size:20px;margin:0 0 8px;text-transform:uppercase;letter-spacing:-.01em}
+.foot p{margin:0 0 8px;font-size:13px;line-height:1.55;color:var(--ink-2);max-width:88ch}
+.foot p b{color:var(--ink);font-weight:600}
+.src{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.05em;color:var(--ink-3);line-height:1.6;margin-top:14px;padding-top:12px;border-top:1px solid var(--rule-soft)}
+
+/* ---------- responsive ---------- */
+@media (max-width:1080px){
+  .atlas{grid-template-columns:minmax(0,1fr)}
+  .spine{margin:20px 0 0}
+  .g6{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .g4{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .tiles{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:680px){
+  .sheet{padding:22px 16px 0}
+  .mast{grid-template-columns:minmax(0,1fr)}
+  .level{grid-template-columns:minmax(0,1fr);gap:14px}
+  .gutter{display:flex;align-items:baseline;gap:12px}
+  .gutter .num{font-size:34px}
+  .gutter .lvl{position:static;transform:none}
+  .g6,.g4,.g3,.g2,.tiles{grid-template-columns:minmax(0,1fr)}
+  .strip{grid-template-columns:minmax(0,1fr)}
+  .pair{grid-template-columns:minmax(0,1fr)}
+  .pair .a{display:none}
+  .foot{grid-template-columns:minmax(0,1fr)}
+}
+@media print{
+  body{background:#fff;font-size:15px}
+  .wrap{padding:0}
+  .sheet{max-width:none;border:0;box-shadow:none;padding:0}
+  .atlas{grid-template-columns:minmax(0,1fr) 400px;gap:0 40px}
+  .level{break-inside:avoid;padding:34px 0}
+  .card li,.card p,.steps li{font-size:14px}
+  .spine li,.spine-lede,.spine .closer{font-size:13.5px}
+  .lvl-head h2{font-size:30px}
+  .lvl-head p,.strip p{font-size:15px}
+  .gutter .num,.foot .num{font-size:66px}
+  .pillar p{font-size:13px}
+  .pillar .tell{font-size:12.5px}
+  .tile p{font-size:13px}
+  h1{font-size:76px}
+  .deck{font-size:18px;max-width:78ch}
+}
+</style>
+
+<div class="wrap">
+<div class="sheet">
+
+  <header class="mast">
+    <div>
+      <h1>The Map of<br><em>City Intelligence</em></h1>
+      <p class="deck">Cities have never been more measured — and many are still not becoming healthier, more resilient or more inclusive. <b>Intelligence is not how much a system knows. It is whether it can act on what it knows.</b> This map sets out the four levels of that capacity: how to see a city, how to measure it, how to intervene in it, and what to build now to keep its options open.</p>
+      <p class="byline">Dr. Fatime Barbara Hegyi · <strong>Future of Cities</strong> · Drawn from the City Intelligence masterclasses &amp; the City Intelligence Index</p>
+    </div>
+    <div class="key">
+      <span class="key-t">CII pillars</span>
+      <div class="key-row">
+        <span class="key-item"><span class="dot" style="background:var(--p1)"></span>Foundational</span>
+        <span class="key-item"><span class="dot" style="background:var(--p2)"></span>Innovator</span>
+        <span class="key-item"><span class="dot" style="background:var(--p3)"></span>Integrator</span>
+      </div>
+      <div class="key-row">
+        <span class="key-item"><span class="dot" style="background:var(--p4)"></span>Regenerative</span>
+        <span class="key-item"><span class="dot" style="background:var(--p5)"></span>Connected</span>
+        <span class="key-item"><span class="dot" style="background:var(--p6)"></span>Healthy Society</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="atlas">
+    <div class="levels">
+
+      <!-- LEVEL 01 -->
+      <section class="level" style="--lvl:var(--p1)">
+        <div class="gutter"><div class="num">01</div><div class="lvl">Seeing</div></div>
+        <div>
+          <div class="lvl-head">
+            <h2>The Lens: reading a city as a living system</h2>
+            <p>The most consequential shift in urban strategy is conceptual, not technological. Before any instrument is useful, the question has to change — from <i>how do we fix this?</i> to <i>what pattern is producing this?</i></p>
+          </div>
+          <div class="grid g4">
+            <div class="card">
+              <h3>Machine → Living system</h3>
+              <ul>
+                <li>The machine model treats the city as a static object, fixed by technical solutions and linear cause and effect.</li>
+                <li>The living-system model treats it as an evolving organism: <b>the event is noise, the pattern is the signal</b>.</li>
+                <li>Residents are co-creators, not users.</li>
+                <li>Success is long-term resilience, not delivery.</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>The four flows</h3>
+              <ul>
+                <li><b>People</b> — commuting, migration, footfall</li>
+                <li><b>Information</b> — data streams, weak signals, rumour</li>
+                <li><b>Resources</b> — energy, goods, water, materials</li>
+                <li><b>Emotions</b> — collective mood, trust, social energy</li>
+              </ul>
+              <p class="note">Read where flows accelerate, stall, or build pressure. Footfall drifting away from a neighbourhood market signals economic stress before any dataset registers it.</p>
+            </div>
+            <div class="card">
+              <h3>Loops &amp; lags</h3>
+              <ul>
+                <li><b>Balancing loops</b> stabilise — trees planted against urban heat.</li>
+                <li><b>Reinforcing loops</b> amplify — added bus capacity generates the demand that recreates crowding.</li>
+                <li>Delays are structural: behavioural change runs 5–15 years in mobility and decades in health; infrastructure takes years; political cycles are shorter than both.</li>
+                <li><b>Path dependency</b>: early choices foreclose later options.</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Invisible infrastructure</h3>
+              <ul>
+                <li>Trust in institutions. Daily dignity. Chronic stress. Belonging. Safety <i>felt</i> against safety <i>measured</i>.</li>
+                <li>Bike lanes are not infrastructure — they are connection, safety, health and trust.</li>
+              </ul>
+              <p class="note">Not soft metrics. When these deplete, adaptive capacity begins to collapse long before the data spikes.</p>
+            </div>
+          </div>
+          <div class="grid g2" style="margin-top:12px">
+            <div class="card alert">
+              <h3>Why cities fail despite good data</h3>
+              <ul>
+                <li><b>Fragmentation</b> — data siloed across departments</li>
+                <li><b>Over-measurement</b> — many KPIs, no prioritisation</li>
+                <li><b>Translation gap</b> — insight never reaches the decision</li>
+                <li><b>Misaligned incentives</b> — cycles override outcomes</li>
+                <li><b>Short-termism</b> — systems react to crises, not signals</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Evidence is not intelligence</h3>
+              <p>Evidence is concerned with <b>what we know</b>. Intelligence is concerned with <b>how a system acts on what it knows</b>. A city can be data-rich and intelligence-poor: the chain between evidence and impact breaks at a named, findable point every time.</p>
+              <p class="note">Ask of any failure you have lived through: which of the five modes was responsible — and what would have changed had it been named at the design stage?</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- LEVEL 02 -->
+      <section class="level" style="--lvl:var(--p3)">
+        <div class="gutter"><div class="num">02</div><div class="lvl">Measuring</div></div>
+        <div>
+          <div class="lvl-head">
+            <h2>The Instrument: the City Intelligence Index</h2>
+            <p>A diagnostic lens, not a ranking. Six pillars, 150 indicators — and, more importantly, the relationships between them. A high composite score can mask a critical single-pillar weakness.</p>
+          </div>
+
+          <div class="strip">
+            <h3>Four conditions</h3>
+            <p><b>Circulation</b> — information crosses departments and arrives before the crisis. &nbsp;<b>Feedback</b> — the system learns what its own actions produce. &nbsp;<b>Alignment</b> — the people who know are deliberately connected to the people who decide. &nbsp;<b>Time horizon</b> — long-term capacity is protected against short-term pressure. Their presence predicts outcomes more reliably than any single indicator; they are what the CII is built to measure.</p>
+          </div>
+
+          <div class="grid g6">
+            <div class="pillar" style="--pc:var(--p1)">
+              <span class="pn">01</span><h4>Foundational</h4>
+              <p>Participation, education, digital access, institutional trust.</p>
+              <p class="tell">The floor everything else stands on.</p>
+            </div>
+            <div class="pillar" style="--pc:var(--p2)">
+              <span class="pn">02</span><h4>Innovator</h4>
+              <p>Knowledge generation and the translation of R&amp;D into use.</p>
+              <p class="tell">Strong here on a weak floor never becomes equitable outcome.</p>
+            </div>
+            <div class="pillar" style="--pc:var(--p3)">
+              <span class="pn">03</span><h4>Integrator</h4>
+              <p>Governance coherence, policy responsiveness, safety.</p>
+              <p class="tell">Where good intentions survive or die in delivery.</p>
+            </div>
+            <div class="pillar" style="--pc:var(--p4)">
+              <span class="pn">04</span><h4>Regenerative</h4>
+              <p>Climate resilience, air quality, renewable energy.</p>
+              <p class="tell">The capacity to absorb shocks without losing function.</p>
+            </div>
+            <div class="pillar" style="--pc:var(--p5)">
+              <span class="pn">05</span><h4>Connected</h4>
+              <p>International flows, cultural diversity, data interoperability.</p>
+              <p class="tell">Openness as a structural asset, not a slogan.</p>
+            </div>
+            <div class="pillar" style="--pc:var(--p6)">
+              <span class="pn">06</span><h4>Healthy Society</h4>
+              <p>Health outcomes, mental well-being, access to care.</p>
+              <p class="tell">Every other pillar eventually reports here. This is the accountability layer.</p>
+            </div>
+          </div>
+
+          <div class="grid g3" style="margin-top:12px">
+            <div class="card">
+              <h3>The three-step read</h3>
+              <ol class="steps">
+                <li><b>Find the outlier.</b> Which pillar diverges most from the city's own profile?</li>
+                <li><b>Locate the broken connection.</b> Which two pillars should be aligned and are not?</li>
+                <li><b>Ask the attribution question</b> in one sentence: which decisions, in which domains, are producing this pattern?</li>
+              </ol>
+            </div>
+            <div class="card">
+              <h3>Weak signal ≠ structural gap</h3>
+              <p>A <b>weak signal</b> is an early pattern visible before official data — rising informal food-sharing months ahead of poverty statistics. A <b>structural gap</b> is a missing connection between two parts of the system that should be linked.</p>
+              <p class="note">The signal buys lead time. The gap is the cause. Do not treat one as the other.</p>
+            </div>
+            <div class="card">
+              <h3>Health as the accountability layer</h3>
+              <p>Health is not a sector. It is the accumulated outcome of every decision a city makes. Transport policy is health policy; housing is health policy.</p>
+              <p class="note">In the CII, Foundational and Healthy Society move closely together (r ≈ 0.91) — a correlation, not a mechanism, and a prompt for the attribution question rather than an answer to it.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- LEVEL 03 -->
+      <section class="level" style="--lvl:var(--p5)">
+        <div class="gutter"><div class="num">03</div><div class="lvl">Acting</div></div>
+        <div>
+          <div class="lvl-head">
+            <h2>The Move: from diagnosis to intervention to strategy</h2>
+            <p>Most interventions fail not because the diagnosis was wrong, but because the design addressed the symptom rather than the structure producing it. And most strategies fail after design, in implementation — for reasons that are structural, not motivational.</p>
+          </div>
+
+          <div class="grid g3">
+            <div class="card">
+              <h3>The first intelligent move</h3>
+              <ol class="steps">
+                <li>Choose the pillar.</li>
+                <li>Define why it matters for quality of life.</li>
+                <li>Name signals, not symptoms.</li>
+                <li>Map spillover into adjacent pillars.</li>
+                <li>Assess the systemic cost of not acting.</li>
+                <li>Design the move: <b>small, measurable, structural — with the feedback mechanism built in here</b>, not added later.</li>
+                <li>Reflect and coordinate across pillars.</li>
+              </ol>
+            </div>
+            <div class="card">
+              <h3>Four hallmarks of intelligence</h3>
+              <ul>
+                <li>Targets the <b>structural gap</b>, not the symptom.</li>
+                <li>Accounts for <b>systemic delay</b> in its own timeline.</li>
+                <li>Creates <b>spillover</b> across adjacent pillars.</li>
+                <li>Embeds a <b>feedback mechanism at design stage</b> — evaluation as architecture, not afterthought.</li>
+              </ul>
+              <p class="note">An intervention without a feedback mechanism is a bet, not a system.</p>
+            </div>
+            <div class="card">
+              <h3>Five policy traps</h3>
+              <ul>
+                <li>Scaling before the first move has had time to work.</li>
+                <li>Optimising for visibility over structural importance.</li>
+                <li>Reading a systemic delay as failure — and defunding at month nine what needed eighteen.</li>
+                <li>The single-pillar fix that meets an adjacent pillar's ceiling.</li>
+                <li>Designing without feedback.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="grid g2" style="margin-top:12px">
+            <div class="card">
+              <h3>Why strategies fail — and what holds them</h3>
+              <div class="pairs">
+                <div class="pair"><span class="f">Mandate fragmentation</span><span class="a">→</span><span class="c">Shared accountability framework</span></div>
+                <div class="pair"><span class="f">Metric substitution</span><span class="a">→</span><span class="c">One shared outcome metric</span></div>
+                <div class="pair"><span class="f">Political cycle truncation</span><span class="a">→</span><span class="c">Transition-proofing protocol</span></div>
+                <div class="pair"><span class="f">Institutional capture</span><span class="a">→</span><span class="c">Structural protection mechanism</span></div>
+              </div>
+              <p class="note">The gap is between strategy design and strategy survival. Early-warning indicators for each failure mode belong in the strategy document itself.</p>
+            </div>
+            <div class="card">
+              <h3>From one move to a compounding strategy</h3>
+              <ul>
+                <li>Sequence so each move <b>raises the probability of success for the next</b> — compounding, not parallel.</li>
+                <li>Respect the <b>pillar dependency hierarchy</b>: the Foundational floor has to hold before higher pillars can carry weight.</li>
+                <li>Name the <b>continuity risk</b> before the mandate changes hands.</li>
+              </ul>
+              <p class="note">A city intelligence system has four working parts: a <b>diagnostic</b> function, a <b>strategy</b> function, a <b>governance</b> function and a <b>learning</b> function. Missing any one, the other three degrade.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- LEVEL 04 -->
+      <section class="level" style="--lvl:var(--p2);border-bottom:0">
+        <div class="gutter"><div class="num">04</div><div class="lvl">Horizon</div></div>
+        <div>
+          <div class="lvl-head">
+            <h2>The Horizon: capacities to build now</h2>
+            <p>Not predictions. These are the capacities that keep a city's future options open — and the research infrastructure that makes structural comparison possible.</p>
+          </div>
+          <div class="tiles">
+            <div class="tile"><h4>Optionality by design</h4><p>Preserving multiple pathways is risk management, not indecision.</p></div>
+            <div class="tile"><h4>Foresight over forecasting</h4><p>Multiple plausible scenarios protect optionality; extending today's trend erodes it.</p></div>
+            <div class="tile"><h4>Beyond the city average</h4><p>Distributional reading — a seven-year life expectancy gap hides inside a good composite score.</p></div>
+            <div class="tile"><h4>Participatory sensing</h4><p>Ethnographic and mixed-method work where weak signals actually live.</p></div>
+            <div class="tile"><h4>Transition-proofed governance</h4><p>Protocols that carry a strategy across a change of administration.</p></div>
+            <div class="tile"><h4>AI-augmented cognition</h4><p>Surfacing second-order effects and what is being missed. <i>syn.city.ai — in development.</i></p></div>
+            <div class="tile"><h4>An open CII platform</h4><p>Shared instrument, shared method, comparable structural evidence.</p></div>
+            <div class="tile"><h4>Cross-city comparative research</h4><p>Structural capacity as the unit of comparison, in place of GDP and output rankings.</p></div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- SPINE -->
+    <aside class="spine">
+      <div>
+        <h2 class="spine-title">The Steward's Spine</h2>
+        <p class="spine-lede">Every level of this map runs through a practitioner. The instrument does not think; the person using it does. This is what the map asks of you.</p>
+      </div>
+      <div class="sblock">
+        <h4>Four postures</h4>
+        <ul>
+          <li><b>The Optimiser</b> — performance, efficiency, delivery of measurable results.</li>
+          <li><b>The Translator</b> — bridges fragmented data, diverse stakeholders, siloed institutions.</li>
+          <li><b>The Steward</b> — holds long-term direction, protects future capacity and dignity.</li>
+          <li><b>The Systems Listener</b> — weak signals, feedback loops, lived experience. The most underused posture in institutional settings.</li>
+        </ul>
+        <p class="spine-lede" style="margin-top:9px">These are cognitive modes, not roles. Practitioners switch between them; the skill is reading which one the situation demands.</p>
+      </div>
+      <hr>
+      <div class="sblock">
+        <h4>Three demands</h4>
+        <ul>
+          <li><b>Intellectual honesty</b> — including about what your own diagnosis cannot see.</li>
+          <li><b>Patience with complexity</b> — holding direction through a delay without losing nerve.</li>
+          <li><b>Continuity of commitment</b> — beyond the reporting cycle.</li>
+        </ul>
+      </div>
+      <div class="sblock">
+        <h4>Three practices</h4>
+        <ul>
+          <li><b>The structural question habit</b> — ask what produces the pattern before proposing a fix.</li>
+          <li><b>Reading against the metric</b> — what does this number conceal?</li>
+          <li><b>The personal feedback loop</b> — how would you know you were wrong?</li>
+        </ul>
+      </div>
+      <hr>
+      <div class="sblock">
+        <h4>Three equity questions</h4>
+        <ul>
+          <li>Who designed the index, and with which assumptions?</li>
+          <li>Whose cities are counted — and whose are absent from the dataset?</li>
+          <li>What does the aggregate conceal about the people inside it?</li>
+        </ul>
+      </div>
+      <p class="closer">City intelligence is not city efficiency. An index is a claim about what matters, and measurement is a political and ethical act before it is a technical one.</p>
+    </aside>
+  </div>
+
+  <footer class="foot">
+    <div class="num">05</div>
+    <div>
+      <h2>From awareness to agency</h2>
+      <p>The map is a diagnostic, not a verdict. No city scores well everywhere, and none needs to: <b>the useful question is which single structural gap, closed first, would raise the probability of everything else succeeding.</b></p>
+      <p>So begin narrow and concrete. One pillar. One signal that something is off, noticed before it becomes a problem. One first move small enough to be measured and structural enough to matter — with the feedback mechanism built in from the start, so that in eighteen months you will know whether you were right.</p>
+      <p>And then the harder work: building the shared accountability, the shared outcome metric and the transition protocol that let the move survive the people who made it. Cities are not improved by better analysis alone. They are improved by institutions that can act on what their analysis tells them.</p>
+      <p class="src">Compiled from the <b>City Intelligence</b> masterclasses for policymakers and researchers, <b>Cities Are Alive</b>, and the City Intelligence Index research · Dr. Fatime Barbara Hegyi · Future of Cities Academy · Brussels, 2026</p>
+    </div>
+  </footer>
+
+</div>
+</div>
+
+</body></html>
